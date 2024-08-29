@@ -8,7 +8,7 @@ std::string readCommandline(int argc, char **argv)
 {
     if (argc != 2)
     {
-        std::cout << "Inserire un unico file: \"./fileoggetto filedata.msp\"" << std::endl;
+        std::cout << "Inserire un unico file: \"./fileoggetto filedata.msp.gz\"" << std::endl;
         return "";
     }
     std::string cmdline = "../benchmark/" + std::string(argv[1]); // Conversione argv[1] che è un char * in una std::string
