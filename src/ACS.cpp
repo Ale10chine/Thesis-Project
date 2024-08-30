@@ -77,19 +77,19 @@ int main(int argc, char **argv)
             // #### Definizione delta 1 e 2 (variabili) per usarli nel FMIP e nel OMIP
             IloInt m = rng.getSize(); // # dei vincoli
 
-            IloNumVarArray delta1(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
-            IloNumVarArray delta2(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
+            IloNumVarArray dp(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
+            IloNumVarArray dn(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
 
             env.out() << var.getSize() << endl; // Per vedere quanto grande è il modello fino a qua
 
             // Assegnazione nome alle variabili
             for (int i = 0; i < m; i++)
             {
-                string name1 = "delta1_" + to_string(i + 1);
-                delta1[i].setName(name1.c_str());
+                string name1 = "dp" + to_string(i + 1);
+                dp[i].setName(name1.c_str());
 
-                string name2 = "delta2_" + to_string(i + 1);
-                delta2[i].setName(name2.c_str());
+                string name2 = "dn" + to_string(i + 1);
+                dn[i].setName(name2.c_str());
             }
 
             // Mi salvo qui la grandezza delle variabili cosi posso fissare solo queste, i delta non li devo fissare nel FMIP!!
@@ -106,29 +106,34 @@ int main(int argc, char **argv)
             cloneRng(env, rng, rngF);
             std::cout<<endl;
             // Copia funzione obbiettivo
-            std::cout << "FUNCTION cloneObj... \n";
-            cloneObj(env, obj, objF);
-            std::cout<<endl;
+            //std::cout << "FUNCTION cloneObj... \n";
+            //cloneObj(env, obj, objF);
+            //std::cout<<endl;
  
-            std::cout<<"\n\n\n";
-            varF.add(delta1);
-            varF.add(delta2);
+
             env.out() << var.getSize() << endl;
 
-            // Obj. function of the FMIP : sum_{i = 0}^{m} (delta1[i] + delta2[i])
-            IloExpr objFExpr(env);
-            for (int i = 0; i < m; i++)
-            {
-                objFExpr += delta1[i] + delta2[i];
-            }
-            objF = IloMinimize(env, objFExpr, "MINIMIZE");
+            std::cout<<"\n\n\n";
+            fmip.add(dp); // forse cambia qualcosa se addo prima a varF e poi al modello 
+            fmip.add(dn);
+            //fmip.add(varF);
 
-            // Constraints of the FMIP : A * x[i] + I_m * delta1[i] + I_m * delta2[i]
-            for (int i = 0; i < m; i++)
-            {
-                rngF[i].setExpr(rng[i].getExpr() + delta1[i] - delta2[i]);
-            }
+            
 
+           
+
+
+
+
+
+
+
+
+
+
+
+
+            
             // Stampa modello con modifiche su costraints e function object
             env.out() << "Modello FMIP aggiornato: " << endl;
             printModel(env,varF,rngF,objF);
@@ -136,6 +141,14 @@ int main(int argc, char **argv)
             env.out() << "\n\nModello MIP: " << endl;
             printModel(env,var,rng,obj);
 
+
+           
+
+
+
+
+            
+           
             // Starting vector for the FMIP ### Poi qua si può implementare ALG2
             std::vector <IloNumArray> startingVector;
 
@@ -188,6 +201,10 @@ int main(int argc, char **argv)
             }
             env.out() << " ]" << endl;
 
+
+
+
+
             // Si crea F e si cerica una percentuale di indici randomici, ai quali verranno fissate le variabili scelte dallo starting vector
             IloIntArray setF(env);
             int paramPercentage = 10; //  PARAM : fisso ogni volta 10 variabili
@@ -227,16 +244,49 @@ int main(int argc, char **argv)
                 std::cout << "Pair " << i << ": LB = " << startBounds[i].first << ", UB = " << startBounds[i].second << std::endl;
             }
 
+            fmip.add(varF); //############################### forse qua ripeto due volte 
+            
+ // Obj. function of the FMIP : sum_{i = 0}^{m} (delta1[i] + delta2[i])
+            IloExpr objFExpr(env);
+            for (int i = 0; i < m; i++)
+            {
+                objFExpr += dp[i] + dn[i];
+            }
+            objF = IloMinimize(env, objFExpr, "MINIMIZE");
+            fmip.add(objF);
+
+            // Constraints of the FMIP : A * x[i] + I_m * delta1[i] + I_m * delta2[i]
+            for (int i = 0; i < m; i++)
+            {
+                rngF[i].setExpr(rng[i].getExpr() + dp[i] - dn[i]);
+            }
+            fmip.add(rngF);
+
             env.out()<<"\nStampa del modello: " <<endl;
             printModel(env,varF,rngF,objF);
             
+            
+
+
             //Risoluzione del modello
             //env.out() << " \n " << setF << endl;
 
-            fmip.add(objF);
-            fmip.add(varF);
-            fmip.add(rngF);
+            //fmip.add(objF);
+            
+            //fmip.add(rngF);
+
             cplexFmip.extract(fmip);
+
+
+             //cplexFmip.extract(fmip); 
+             // Stampa output in file di log
+            std::string s;
+            const char *msg;
+
+            s = parserLog(path, "../out/", true); 
+            msg = s.c_str();                      
+
+            cplexFmip.exportModel(msg); // Esportazione output in un file di log dedicato
 
             std::cout << "\n\n\n ---------------- RISOLUZIONE MODELLO --------------------\n\n\n";
             cplexFmip.solve(); // Risoluzione di FMIP
@@ -253,7 +303,11 @@ int main(int argc, char **argv)
 
             env.out() << vals.getSize() <<endl;
 
+         
+
+
             // Sistemare ::::::::::::::::: ripartire da qui
+            /*
             int j = 0;
             for (int i = vals.getSize() - (2*m); i < vals.getSize(); i++)
             {
@@ -264,7 +318,7 @@ int main(int argc, char **argv)
                     startingVector[2][j++] = vals[i];
                 }
             }
-
+            */    
             env.out() << "Starting Vector (post risoluzione FMIP): " << endl;
             env.out() << " [ ";
 
@@ -391,7 +445,7 @@ void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, co
     // Vars
     for (int i = 0; i < v.getSize(); i++)
     {
-        env.out() << v[i].getName() << " " << v[i].getType() << "   " <<v[i].getLb() << " <= " << v[i].getName() << " <= " <<v[i].getUb();
+        env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() <<"   " <<v[i].getLb() << " <= " << v[i].getName() << " <= " <<v[i].getUb();
         env.out() << endl;
     }
     env.out() << endl;
