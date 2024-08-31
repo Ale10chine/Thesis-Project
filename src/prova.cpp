@@ -22,20 +22,26 @@
 */
 ILOSTLBEGIN
 
-void cloneVar(IloEnv &env, const IloNumVarArray &a, IloNumVarArray &b); // copy from a to b (variables)
+void cloneVar(IloEnv &env, const IloNumVarArray &a, IloNumVarArray &b);                                                 // copy from a to b (variables)
 void cloneRng(IloEnv &env, const IloRangeArray &a, IloRangeArray &b, const IloNumVarArray &varA, IloNumVarArray &varB); // copy froma a to b (constraints)
-void cloneObj(IloEnv &env, const IloObjective &a, IloObjective &b); // copy from a to b (function object)
-void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, const IloObjective &o); // Get a view of the model
-void printObj(IloEnv &env, const IloObjective &o); // View more detailed for each component of the model
+void cloneObj(IloEnv &env, const IloObjective &a, IloObjective &b);                                                     // copy from a to b (function object)
+void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, const IloObjective &o);                   // Get a view of the model
+void printObj(IloEnv &env, const IloObjective &o);                                                                      // View more detailed for each component of the model
 void printVar(IloEnv &env, const IloNumVarArray &v);
 void printRng(IloEnv &env, const IloRangeArray &r);
 
 // Fondamentale questa n perchè ci dice quanto è lungo il vettore di var senza l'aggiunta delle slack
 // Fondamentale anche il passaggio per reference di setI, che verrà aggiornato durante il programma
-std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloNumArray &setI ,const IloInt &n); 
-void printVector(IloEnv &env, const std::vector<IloNumArray> & v);
-std::vector<IloInt> randomVecGenerator(int indX); // Passo il range, ovvero tra i possibili estremi di x^ cioè tra i suoi indici [ 0 - n-1 ]
+std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloIntArray &setI, const IloInt &n, const IloInt &m);
+void printVector(IloEnv &env, const std::vector<IloNumArray> &v);
 
+std::vector<IloInt> randomVecGenerator(int indX);                                 // Passo il range, ovvero tra i possibili estremi di x^ cioè tra i suoi indici [ 0 - n-1 ]
+void printBounds(IloEnv &env, const std::vector<std::pair<IloNum, IloNum>> &vec); // Stampa i range che ogni volta vengono salvati delle variabili da fissare
+// Funzione per il fissaggio delle variabili, oltre a queste ultime modifica F e i bounds di startingBounds
+void variableFixing(IloNumVarArray &v, const IloIntArray &setI, IloIntArray &setF, const std::vector<IloInt> &rVec, const std::vector<IloNumArray> &sVec, std::vector<std::pair<IloNum, IloNum>> &bounds);
+
+void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray> &sVec, const IloNumArray &vals, const IloInt &n, const IloInt &m);
+void restoreBounds(IloNumVarArray &v, const IloIntArray &setF, const std::vector<std::pair<IloNum, IloNum>> &bounds);
 
 const int paramPercentage = 10; //  PARAM : fisso ogni volta 10 variabili
 
@@ -71,9 +77,10 @@ int main(int argc, char **argv)
         mip.add(var);
         mip.add(rng);
 
-        // Stampa modello 
-        env.out() << "\n\nModello MIP dopo l'estrazione:" << endl <<endl;
-        printModel(env, var, rng,obj);
+        // Stampa modello
+        env.out() << "\n\nModello MIP dopo l'estrazione:" << endl
+                  << endl;
+        printModel(env, var, rng, obj);
 
         // Creation of the FMIP sub-problem and his parameters
         try
@@ -86,22 +93,32 @@ int main(int argc, char **argv)
             IloNumVarArray varF(env);
             IloRangeArray rngF(env);
 
+            IloModel omip(env);
+            IloCplex cplexOmip(env);
+
+            // Declaration of some Extractables object for the OMIP model
+            IloObjective objO(env);
+            IloNumVarArray varO(env);
+            IloRangeArray rngO(env);
+
             // #### Definizione delta 1 e 2 (variabili) per usarli nel FMIP e nel OMIP
-            IloInt m = rng.getSize(); // # dei vincoli
+            IloInt m = rng.getSize(); // # dei vincoli è + 1 nel OMIP (NOTA)
+
             // Mi salvo qui la grandezza delle variabili cosi posso fissare solo queste, i delta non li devo fissare nel FMIP!!
             IloInt n = var.getSize();
 
-            IloNumArray setI(env); // setI (F c I) :  array per memorizzare dove si trovano le variabili inzizialemnte (solo quelle fissabili, cioè solo var intere)
+            IloIntArray setI(env); // setI (F c I) :  array per memorizzare dove si trovano le variabili inzizialemnte (solo quelle fissabili, cioè solo var intere)
             IloIntArray setF(env); // setF (F c I) : array per memorizzare solo la percentuale di incidi selezionati in modo randomico
 
+            std::vector<std::pair<IloNum, IloNum>> startBounds; // Struttura dati che mi permette di memeorizzare i bound inizziali durante il fissaggio delle variabili
 
+            IloNum deltaUB; // Vettore che fornirà il bound per il vincolo aggiuntivo dell' OMIP
 
-            //-------------------- CREAZIONE VARIABILI FMIP--------------------
-            // -------------------------------------------------------------------
-            // -------------------------------------------------------------------
+            IloNumVarArray dpF(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
+            IloNumVarArray dnF(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
 
-            IloNumVarArray dp(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
-            IloNumVarArray dn(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
+            IloNumVarArray dpO(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
+            IloNumVarArray dnO(env, m, 0.0, IloInfinity, IloNumVar::Type::Float);
 
             env.out() << var.getSize() << endl; // Per vedere quanto grande è il modello fino a qua
 
@@ -109,60 +126,47 @@ int main(int argc, char **argv)
             for (int i = 0; i < m; i++)
             {
                 string name1 = "dplus" + to_string(i + 1);
-                dp[i].setName(name1.c_str());
+                dpF[i].setName(name1.c_str());
+                dpO[i].setName(name1.c_str());
 
                 string name2 = "dmin" + to_string(i + 1);
-                dn[i].setName(name2.c_str());
+                dnF[i].setName(name2.c_str());
+                dnO[i].setName(name2.c_str());
             }
+
+            //-------------------- CREAZIONE VARIABILI FMIP--------------------
+            // -------------------------------------------------------------------
+            // -------------------------------------------------------------------
+
 
             // Deep copy dal MIP a FMIP
             // Copia variabili:
             std::cout << "FUNCTION cloneVar... \n";
             cloneVar(env, var, varF);
-            std::cout<<endl;
+            std::cout << endl;
 
             env.out() << var.getSize() << endl;
-            
 
-           
             // ######### Starting vector for the FMIP ########### Poi qua si può implementare ALG2
             // startV1 modifica sia le varF con reference che il setI
-            std::vector <IloNumArray> startingVector = startV1(env,varF,setI,n); // Ritorna uno starting vector e modifica il setI aggiungendo gli indici relativi alle variabili intere tale per cui poter essere fissate
-            env.out()<<"Starting Vector: "<< endl;
-            printVector(env,startingVector);
-
+            std::vector<IloNumArray> startingVector = startV1(env, varF, setI, n, m); // Ritorna uno starting vector e modifica il setI aggiungendo gli indici relativi alle variabili intere tale per cui poter essere fissate
+            env.out() << "Starting Vector: " << endl;
+            printVector(env, startingVector);
 
             // ######## Fissaggio variabili ##################
             // Si crea in F (setF) una percentuale di indici randomici, ai quali verranno fissate le variabili scelte dallo starting vector
-            std::vector<IloInt> randomVec = randomVecGenerator(startingVector[0].getSize()-1);
-
-            std::vector<std::pair<IloInt, IloInt>> startBounds; // Struttura dati che mi permette di memeorizzare i bound inizziali durante il fissaggio delle variabili
-
-            // Fissaggio delle variabili, Genero gli indici del setF, e memorizzazione dei bound iniziali
-            for (int i = 0; i < paramPercentage; i++)
-            {
-               // env.out() << "Random generato : "<< randomVec[i] <<endl;
-                setF.add(setI[randomVec[i]]); // Memorizzo gli indici di I in F (F c I)
-
-                startBounds.push_back({varF[setF[i]].getLb(), varF[setF[i]].getUb()}); // Memorizzo Lb e Ub della varibile con indice £ F
-                //env.out()<< "varF[ "<< setF[i] << " ] "<<"  Lb : "<<varF[setF[i]].getLb()<< " Ub : "<< varF[setF[i]].getUb()<< endl;
-
-                varF[setF[i]].setBounds(startingVector[0][randomVec[i]],startingVector[0][randomVec[i]]); // Fisso la variabile, ovvero setto entrambi i bound con il valore salvato in x^
-
-            }
+            std::vector<IloInt> randomVec = randomVecGenerator(startingVector[0].getSize() - 1);
+            // Funzione per il fissaggio delle variabili, mantiene in memoria i bounds inizziali e li modifica, modifica F
+            variableFixing(varF, setI, setF, randomVec, startingVector, startBounds);
 
             env.out() << " \nF = " << setF << endl;
-            env.out() << "\nstartBounds : "<<endl;
-            for (size_t i = 0; i < startBounds.size(); i++)
-            {
-                std::cout << "Pair " << i << ": LB = " << startBounds[i].first << ", UB = " << startBounds[i].second << std::endl;
-            }
+            env.out() << "\nstartBounds : " << endl;
+            printBounds(env, startBounds);
+            std::cout << "\n\n\n";
 
-            std::cout<<"\n\n\n";
-            varF.add(dp);
-            varF.add(dn);
+            varF.add(dpF);
+            varF.add(dnF);
             fmip.add(varF);
-       
 
             //-------------------- CREAZIONE VINCOLI FMIP --------------------
             // -------------------------------------------------------------------
@@ -171,16 +175,15 @@ int main(int argc, char **argv)
             // Copia range
             std::cout << "FUNCTION cloneRng... \n";
             cloneRng(env, rng, rngF, var, varF);
-            std::cout<<endl;            
+            std::cout << endl;
 
-            // Constraints of the FMIP : A * x[i] + I_m * delta1[i] + I_m * delta2[i]
-            IloExpr expr (env);
+            // Constraints of the FMIP : A * x[i] + I_m * dpF[i] - I_m * dnF[i]
+            IloExpr expr(env);
             for (int i = 0; i < m; i++)
             {
                 expr = rngF[i].getExpr();
-                expr += dp[i] - dn[i];   
+                expr += dpF[i] - dnF[i];
                 rngF[i].setExpr(expr);
-                
             }
             fmip.add(rngF);
 
@@ -192,37 +195,32 @@ int main(int argc, char **argv)
             IloExpr objFExpr(env);
             for (int i = 0; i < m; i++)
             {
-                objFExpr += dp[i] + dn[i];
+                objFExpr += dpF[i] + dnF[i];
             }
             objF = IloMinimize(env, objFExpr, "MINIMIZE");
             fmip.add(objF);
 
-        
-
-
             // Stampa modello con modifiche su costraints e function object
             env.out() << "Modello FMIP aggiornato: " << endl;
-            printModel(env,varF,rngF,objF);
+            printModel(env, varF, rngF, objF);
 
             env.out() << "\n\nModello MIP: " << endl;
-            printModel(env,var,rng,obj);
-
+            printModel(env, var, rng, obj);
 
             // -------------------- RISOLUZIONE + FILE LOG FMIP--------------------
             // -------------------------------------------------------------------
             // -------------------------------------------------------------------
-            //Risoluzione del modello
+            // Risoluzione del modello
             cplexFmip.extract(fmip);
 
             // Stampa output in file di log
             std::string s;
             const char *msg;
 
-            s = parserLog(path, "../out/", true); 
-            msg = s.c_str();                      
+            s = parserLog(path, "../out/", true);
+            msg = s.c_str();
 
             cplexFmip.exportModel(msg); // Esportazione output in un file di log dedicato
-
 
             std::cout << "\n\n\n ---------------- RISOLUZIONE MODELLO --------------------\n\n\n";
             cplexFmip.solve(); // Risoluzione di FMIP
@@ -232,29 +230,19 @@ int main(int argc, char **argv)
             env.out() << "Solution value  = " << cplexFmip.getObjValue() << "\n\n\n"
                       << std::endl;
 
-            
-            IloNumArray vals(env); 
-            cplexFmip.getValues(vals, varF);        
-            env.out() << "Values = " << vals << std::endl; 
+            IloNumArray vals(env);
+            cplexFmip.getValues(vals, varF);
+            env.out() << "Values = " << vals << std::endl;
 
             env.out() << varF.getSize() << endl;
-            env.out() << vals.getSize() <<endl;
+            env.out() << vals.getSize() << endl;
 
-            // Sistemare ::::::::::::::::: ripartire da qui
-            /*
-            int j = 0;
-            for (int i = vals.getSize() - (2*m); i < vals.getSize(); i++)
-            {
-                if(j < m) {
+            printVector(env, startingVector);
 
-                    startingVector[1][j++] = vals[i];
-                } else {
-                    startingVector[2][j++] = vals[i];
-                }
-            }
-            */    
+            updateVector(env, setI, startingVector, vals, n, m); // Riempio lo starting Vector filtrando i risultati di vals dati da cplex
+
             env.out() << "Starting Vector (post risoluzione FMIP): " << endl;
-            printVector(env,startingVector);
+            printVector(env, startingVector);
 
             // Finito di risolvere, bisogna risettare le variabili come all'inziio, sfruttando startBounds
             // Dopodichè si restituirà il vettore inziziale come output [x^,Delta+, delta-] dove
@@ -263,39 +251,93 @@ int main(int argc, char **argv)
             //...
             //..
             //.
-    
+
+            // Ripristino i bounds iniziali delle variabili del problema
+            restoreBounds(varF, setF, startBounds);
+            env.out() << "FMIP riprristinato ai bounds originari" << endl;
+            printModel(env, varF, rngF, objF);
+
+            // Creazione di DeltaUB da passare come parametro poi per il vincolo del OMIP, sarà anche la condizione necessaria per accedere al FMIP
+            for (int i = 0; i < m; i++)
+            {
+                deltaUB += startingVector[1][i] + startingVector[2][i];
+            }
+            env.out() << "DeltaUB: " << deltaUB << endl;
+
+            // (IMPORTANTE, ragiona su queli elementi farla) Pulizia variabili o strutture di memoria che devono essere svuotate (NOTA)
+
+
+
+
+            // Creation of the OMIP sub-problem and his parameters
+
+            //-------------------- CREAZIONE VARIABILI OMIP--------------------
+            // -------------------------------------------------------------------
+            // -------------------------------------------------------------------
+
+            // Deep copy dal MIP a OMIP
+            // Copia variabili:
+            std::cout << "FUNCTION cloneVar... \n";
+            cloneVar(env, var, varO);
+            std::cout << endl;
+
+            // Fissaggio delle variabili leggendo il vettore x^ ?
+            // ...
+            // ..
+            // .
+
+            varO.add(dpO);
+            varO.add(dnF);
+            omip.add(varO);
+
+            //-------------------- CREAZIONE VINCOLI OMIP --------------------
+            // -------------------------------------------------------------------
+            // -------------------------------------------------------------------
+
+            // Copia range
+            std::cout << "FUNCTION cloneRng... \n";
+            cloneRng(env, rng, rngO, var, varO);
+            std::cout << endl;
+
+            // Constraints of the OMIP : A * x[i] + I_m * dpO[i] - I_m * dnO[i]
+            //                           sum_{i = 0}^{m}(dpO[i] + dnO[i]) <= deltaUB
+            // nota expr già definita in precedenza riporta su nelle dichiarazioni anche expr2
+            IloExpr expr2(env);
+            for (int i = 0; i < m; i++)
+            {
+                expr = rngO[i].getExpr();
+                expr += dpO[i] - dnO[i];
+                rngO[i].setExpr(expr);
+
+                expr2 += dpO[i] + dnO[i];   
+            }
+
+            IloRange lastRange = (expr2 <= deltaUB);
             
-        }
-        catch (IloException &e)
-        {
-            std::cerr << "Concert exception caught: " << e << endl;
-            env.end();
-        }
-        catch (...)
-        {
-            std::cerr << "Unknown exception caught" << endl;
-            env.end();
-        }
+            rngO.add(lastRange);
+            omip.add(rngO);
+            
+
+            //-------------------- CREAZIONE FUNZIONE OBBIETTIVO OMIP--------------------
+            // -------------------------------------------------------------------
+            // -------------------------------------------------------------------
+
+            // Copia range
+            std::cout << "FUNCTION fobb (omip)... \n";
+            cloneObj(env, obj, objF);
+            std::cout << endl;
+
+            
+            //objO.setName("MINIMIZE");
+
+            omip.add(objO);
+
+            printObj(env,objF);            
+            env.out() <<" OMIP" <<endl;
+            env.out() << rngO.getSize()<<endl;
+            //printModel(env, varO, rngO, objO); INDAGARE SUL PERCHE QUA DA SEG FOULT
 
 
-        // Creazione di DeltaUB da passare come parametro poi per il vincolo del OMIP
-        //...
-        //..
-        //.
-
-        // Creation of the OMIP sub-problem and his parameters
-        try
-        {
-            IloModel omip(env);
-            IloCplex cplexOmip(env);
-
-            // Declaration of some Extractables object for the general MIP model
-            IloObjective objO(env);
-            IloNumVarArray varO(env);
-            IloRangeArray rngO(env);
-
-            //objO = obj;
-            //std::cout << "Objective function of OMIP " << objO.getExpr() << std::endl;
         }
         catch (IloException &e)
         {
@@ -308,11 +350,11 @@ int main(int argc, char **argv)
             env.end();
         }
         /*
-                while ()
-                {
+                 while ()
+                 {
 
-                }
-        */
+                 }
+         */
     }
     catch (IloException &e)
     {
@@ -331,7 +373,11 @@ int main(int argc, char **argv)
     return 0;
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------//
 
+// ------------------------------------------------------------------------- //
+// ------------------------------ FUNCTIONS -------------------------------- // 
+// ------------------------------------------------------------------------- //
 
 void cloneVar(IloEnv &env,const IloNumVarArray &a, IloNumVarArray &b){
 
@@ -476,13 +522,12 @@ void printRng(IloEnv &env, const IloRangeArray &r)
 }
 
 // Fondamentale questa dim perche ci dice quanto è lungo il vettore di var senza l'aggiunta delle slack
-std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloNumArray &setI, const IloInt &n)
+std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloIntArray &setI, const IloInt &n, const IloInt &m)
 {
 
-    IloNumArray x(env);      // x^
-   
-    IloNumArray Delta1(env); // delta+
-    IloNumArray Delta2(env); // delta-
+    IloNumArray x(env);      // x^ non sappiamo ancora la dimensione, sarà grande tanto quanto il numero di variabili intere da fissare
+    IloNumArray Delta1(env,m); // delta+ la sua dimensione è sicuramente m
+    IloNumArray Delta2(env,m); // delta- la sua dimensione è sicuramente m
 
     // IloInt n = var.getSize(); // Occhio da qua prendi la dimensione dopo l'aggiunta delle nuove variabili
 
@@ -554,6 +599,73 @@ std::vector<IloInt> randomVecGenerator(int indX)
     return randomVec;
 }
 
+void printBounds(IloEnv &env, const std::vector<std::pair<IloNum, IloNum>> &vec)
+{
+    for (size_t i = 0; i < vec.size(); i++)
+    {
+        std::cout << "Pair " << i << ": LB = " << vec[i].first << ", UB = " << vec[i].second << std::endl;
+    }
+}
+
+void variableFixing(IloNumVarArray &v, const IloIntArray &setI, IloIntArray &setF, const std::vector<IloInt> &rVec, const std::vector <IloNumArray> &sVec ,std::vector<std::pair<IloNum, IloNum>> &bounds)
+{
+
+    // Fissaggio delle variabili, Genero gli indici del setF, e memorizzazione dei bound iniziali
+    for (int i = 0; i < paramPercentage; i++)
+    {
+        // env.out() << "Random generato : "<< randomVec[i] <<endl;
+        setF.add(setI[rVec[i]]); // Memorizzo gli indici di I in F (F c I)
+
+        bounds.push_back({v[setF[i]].getLb(), v[setF[i]].getUb()}); // Memorizzo Lb e Ub della varibile con indice £ F
+        // env.out()<< "varF[ "<< setF[i] << " ] "<<"  Lb : "<<varF[setF[i]].getLb()<< " Ub : "<< varF[setF[i]].getUb()<< endl;
+
+        v[setF[i]].setBounds(sVec[0][rVec[i]], sVec[0][rVec[i]]); // Fisso la variabile, ovvero setto entrambi i bound con il valore salvato in x^
+    }
+}
+
+void updateVector(IloEnv &env, const IloIntArray &setI, std::vector <IloNumArray> &sVec,const IloNumArray &vals, const IloInt &n, const IloInt &m )
+{
+
+    env.out() << "n :" << n << " m : " << m << endl;
+    int j = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (setI[j] == i)
+        {
+            env.out() << i << " ";
+            sVec[0][j] = vals[i];
+            env.out() << " x :" << sVec[0][j] << endl;
+            j++;
+        }
+    }
+
+    // Al primo ciclo sono vuoti i delta quindi bisognerà aggiungerli
+    j = 0;
+    int c = 0;
+    for (int i = n; i < 2 * m + n; i++, j++)
+    {
+
+        if (j < m)
+        {
+            sVec[1][j] = vals[i];
+            env.out() << " Delta+ :" << sVec[1][j] << " j :" << j << " i : " << i << endl;
+        }
+        else
+        {
+            sVec[2][c] = vals[i];
+            env.out() << " Delta- :" << sVec[2][c] << " c :" << c << " j :" << j << " i : " << i << endl;
+            c++;
+        }
+    }
+}
+
+void restoreBounds(IloNumVarArray &v, const IloIntArray &setF, const std::vector<std::pair<IloNum,IloNum>> &bounds)
+{
+    for (int i = 0; i < paramPercentage; i++)
+    {
+        v[setF[i]].setBounds(bounds[i].first, bounds[i].second);
+    }
+}
 /*
 g++ -std=c++17 -c Utility.cpp -o Utility.o
 g++ -std=c++17 -c ACS.cpp -o acs.o

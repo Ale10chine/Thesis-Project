@@ -112,7 +112,7 @@ int main(int argc, char **argv)
  
 
             env.out() << var.getSize() << endl;
-
+            
             std::cout<<"\n\n\n";
             fmip.add(dp); // forse cambia qualcosa se addo prima a varF e poi al modello 
             fmip.add(dn);
@@ -120,19 +120,21 @@ int main(int argc, char **argv)
 
             
 
-           
+            // Obj. function of the FMIP : sum_{i = 0}^{m} (delta1[i] + delta2[i])
+            IloExpr objFExpr(env);
+            for (int i = 0; i < m; i++)
+            {
+                objFExpr += dp[i] + dn[i];
+            }
+            objF = IloMinimize(env, objFExpr, "MINIMIZE");
+            fmip.add(objF);
 
-
-
-
-
-
-
-
-
-
-
-
+            // Constraints of the FMIP : A * x[i] + I_m * delta1[i] + I_m * delta2[i]
+            for (int i = 0; i < m; i++)
+            {
+                rngF[i].setExpr(rng[i].getExpr() + dp[i] - dn[i]);
+            }
+            fmip.add(rngF);
             
             // Stampa modello con modifiche su costraints e function object
             env.out() << "Modello FMIP aggiornato: " << endl;
@@ -140,10 +142,6 @@ int main(int argc, char **argv)
 
             env.out() << "\n\nModello MIP: " << endl;
             printModel(env,var,rng,obj);
-
-
-           
-
 
 
 
@@ -244,24 +242,6 @@ int main(int argc, char **argv)
                 std::cout << "Pair " << i << ": LB = " << startBounds[i].first << ", UB = " << startBounds[i].second << std::endl;
             }
 
-            fmip.add(varF); //############################### forse qua ripeto due volte 
-            
- // Obj. function of the FMIP : sum_{i = 0}^{m} (delta1[i] + delta2[i])
-            IloExpr objFExpr(env);
-            for (int i = 0; i < m; i++)
-            {
-                objFExpr += dp[i] + dn[i];
-            }
-            objF = IloMinimize(env, objFExpr, "MINIMIZE");
-            fmip.add(objF);
-
-            // Constraints of the FMIP : A * x[i] + I_m * delta1[i] + I_m * delta2[i]
-            for (int i = 0; i < m; i++)
-            {
-                rngF[i].setExpr(rng[i].getExpr() + dp[i] - dn[i]);
-            }
-            fmip.add(rngF);
-
             env.out()<<"\nStampa del modello: " <<endl;
             printModel(env,varF,rngF,objF);
             
@@ -272,7 +252,7 @@ int main(int argc, char **argv)
             //env.out() << " \n " << setF << endl;
 
             //fmip.add(objF);
-            
+            fmip.add(varF); //############################### forse qua ripeto due volte 
             //fmip.add(rngF);
 
             cplexFmip.extract(fmip);
