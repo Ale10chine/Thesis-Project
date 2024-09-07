@@ -1,0 +1,199 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 648.000000
+-------DeltaUB POST FMIP-----------: 648.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = -175736.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 403.000000
+-------DeltaUB POST FMIP-----------: 403.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = -4188.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 273.000000
+-------DeltaUB POST FMIP-----------: 273.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 78484.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 202.000000
+-------DeltaUB POST FMIP-----------: 202.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 135212.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 168.000000
+-------DeltaUB POST FMIP-----------: 168.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 142992.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 135.000000
+-------DeltaUB POST FMIP-----------: 135.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 174839.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 108.000000
+-------DeltaUB POST FMIP-----------: 108.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 193707.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 211635.000000
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 9 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 76.000000
+-------DeltaUB POST FMIP-----------: 76.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 9 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 223552.000000
+Le slack non sono a zero quindi il problema non è stato risolto per superata soglia di iterazioni --> Mip non risolto 

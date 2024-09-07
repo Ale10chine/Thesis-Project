@@ -1,6 +1,7 @@
 .vscode/
 .DS_Store
 prova
+acs
 *.o
 *.sol
 *.lp

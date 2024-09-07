@@ -1,0 +1,22 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1039.667000
+-------DeltaUB POST FMIP-----------: 687.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
