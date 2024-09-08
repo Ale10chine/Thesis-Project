@@ -8,8 +8,8 @@
 
 
 Solution status = Optimal
-Solution value = 919.000000
--------DeltaUB POST FMIP-----------: 919.000000
+Solution value = 60.000000
+-------DeltaUB POST FMIP-----------: 60.000000
 
 
  ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
@@ -19,7 +19,7 @@ Solution value = 919.000000
 
 
 Solution status = Optimal
-Solution value = 9888.500000
+Solution value = 20166.000000
 
 
 
@@ -30,8 +30,8 @@ Solution value = 9888.500000
 
 
 Solution status = Optimal
-Solution value = 518.000000
--------DeltaUB POST FMIP-----------: 515.000000
+Solution value = -0.000000
+-------DeltaUB POST FMIP-----------: 0.000000
 
 
  ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
@@ -41,114 +41,6 @@ Solution value = 518.000000
 
 
 Solution status = Optimal
-Solution value = 27182.000000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 267.000000
--------DeltaUB POST FMIP-----------: 263.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 34669.000000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 164.000000
--------DeltaUB POST FMIP-----------: 159.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 40603.000000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 103.000000
--------DeltaUB POST FMIP-----------: 96.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 35770.000000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 6 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 30.000000
--------DeltaUB POST FMIP-----------: 21.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 6 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 39638.000000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 7 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 9.000000
--------DeltaUB POST FMIP-----------: 4.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 7 --------------------
-
-
-
-
-
-Solution status = Infeasible
-Problema del bug, l'OMIP è risultato infeasible
+Solution value = 29831.000000
+Risolto OMIP almeno ammissibile e slack a 0 --> Ho trovato una soluzione ammissibile per il MIP 
+Status OMIP :Optimal

@@ -7,7 +7,7 @@ namespace fs = std::filesystem; // Creo un alias per semplicità
 
 std::string readCommandline(int argc, char **argv)
 {
-    if (argc != 2)
+    if (argc != 4)
     {
         std::cout << "Inserire un unico file: \"./fileoggetto filedata.msp.gz\"" << std::endl;
         return "";

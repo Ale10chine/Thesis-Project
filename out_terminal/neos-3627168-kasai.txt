@@ -8,8 +8,8 @@
 
 
 Solution status = Optimal
-Solution value = 9758.000000
--------DeltaUB POST FMIP-----------: 9756.000000
+Solution value = 0.000000
+-------DeltaUB POST FMIP-----------: 0.000000
 
 
  ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
@@ -19,94 +19,6 @@ Solution value = 9758.000000
 
 
 Solution status = Optimal
-Solution value = 1228212.180000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 5345.500000
--------DeltaUB POST FMIP-----------: 5344.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 1182071.120000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 3283.000000
--------DeltaUB POST FMIP-----------: 3282.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 1140004.080000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 587.500000
--------DeltaUB POST FMIP-----------: 587.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 1121681.320000
-
-
-
- ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 0.000000
--------DeltaUB POST FMIP-----------: 0.000000
-
-
- ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
-
-
-
-
-
-Solution status = Optimal
-Solution value = 1087302.960000
+Solution value = 1026841.570000
 Risolto OMIP almeno ammissibile e slack a 0 --> Ho trovato una soluzione ammissibile per il MIP 
 Status OMIP :Optimal

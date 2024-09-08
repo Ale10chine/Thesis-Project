@@ -57,46 +57,61 @@ std::string getStatusDescription(IloAlgorithm::Status status);// Per convertire 
 
 int main(int argc, char **argv)
 {
-    const int seed = 12345;
-    std::srand(seed); // Inizializza il generatore di numeri casuali
-
-    // Variabili necessari per la stampa in un file di log
-    std::string s;
-    const char *msg;
-    
-    // Dichiarazione variabili per tenere traccia del tempo per ciascun algoritmo 
-    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-    std::chrono::duration<double> elapsed;
-
     // Contatori per tenere traccia del tipo di risultati a cui converge ACS
     int risolti = 0;
     int timeLimit = 0;
     int iterLimit = 0;
     int error = 0;
     int errorF = 0; // Errori nel FMIP dovrebbero sempre rimanere a 0
+    int except = 0;
 
-    bool choice = false;// Scelta
-    int cycle; // Numero di problemi da risolvere
-    int p = 0; // Indice del problema da risolvere
+    bool choice = false; // Scelta
+    int cycle;           // Numero di problemi da risolvere
+    int p = 0;           // Indice del problema da risolvere
 
+    
     // Declaration of a vector of MIP problems to resolve
     std::vector<std::string> problems;
+    
+    // Setting parameters from command line input
+    int seed;    
+    float percentage;
 
-    std::string cmdline = readCommandline(argc, argv);
-
-    if (!cmdline.empty())
-        choice = true;
-
-    if (choice)
+    if (argc == 3)
     {
+        problems = readDirectory("../benchmark");
+        cycle = 50;   
+        seed = std::stoi(argv[1]);
+        percentage = std::stoi(argv[2]) * 0.01; 
+    }
+    else if (argc == 4)
+    {  
+        std::string cmdline = readCommandline(argc, argv); 
         problems.push_back(cmdline);
         cycle = 1;
+        seed = std::stoi(argv[2]);
+        percentage = std::stoi(argv[3]) * 0.01;
     }
     else
     {
-        problems = readDirectory("../benchmark");
-        cycle = 240;
+        std::cerr << "\nErrore nell' immissione dei dati in input, riprova nel seguente formato: \n"
+                  << "/eseguibile seed percentuale \n"
+                  << "/eseguibile problema.mps.gz seed percentuale \n" 
+                  << std::endl;
+        return 1;
     }
+
+    std::srand(seed); // Inizializza il generatore di numeri casuali        
+
+    //std::string outPath = 
+
+    // Variabili necessari per la stampa in un file di log
+    std::string s;
+    const char *msg;
+
+    // Dichiarazione variabili per tenere traccia del tempo per ciascun algoritmo
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+    std::chrono::duration<double> elapsed;
 
     // Apri il file CSV in modalità append (aggiunge nuove righe senza sovrascrivere)
     std::ofstream csv("../out_csv/Result.csv", std::ios::app);
@@ -105,7 +120,8 @@ int main(int argc, char **argv)
     std::ifstream checkFile("../out_csv/Result.csv");
     if (checkFile.peek() == std::ifstream::traits_type::eof())
     {
-        csv << "\"ProblemName\",\"Status\",\"Time\",\"Objective value (ACS)\",\"Objective value (optimal)\",\"Type\",\"PrimalGap\"\n";
+        csv << "\"ProblemName\",\"Status\",\"Time (sec)\","
+            << "\"Objective value (ACS)\",\"Objective value (optimal)\",\"Type\",\"PrimalGap\"\n";
     }
     checkFile.close();
 
@@ -340,7 +356,7 @@ int main(int argc, char **argv)
             env.out() << "Starting Vector: " << endl;
             printVector(env, startingVector);
 
-            const int paramPercentage = setI.getSize() * 0.8; //  PARAM : fisso ogni volta n variabili
+            const int paramPercentage = setI.getSize() * percentage; //  PARAM : fisso ogni volta n variabili
             // const int paramPercentage = 2000;
             std::cout << "paramPercentage :" << paramPercentage << endl;
 
@@ -437,6 +453,8 @@ int main(int argc, char **argv)
                         else
                         {
                             env.out() << "FMIP infeasible, NON TORNA" << endl;
+                            solvFmip = false;
+                            break;
                         }
                     }
 
@@ -643,7 +661,7 @@ int main(int argc, char **argv)
         catch (IloException &e)
         {
             std::cerr << "Concert exception caught: " << e << endl;
-            error++;
+            except++;// da cambiare questo errore non è correttissimo
             // env.end();
         }
         catch (...)
@@ -665,7 +683,7 @@ int main(int argc, char **argv)
     std::cout<<"Non sono riuscito a risovlere : "<<timeLimit<<" Problemi perchè non ho trovato una sol. ammissibile per il OMIP nella soglia di tempo con le slack > 0"<<endl;
     std::cout<<"Ho trovato  "<<error<<" Infeasible o bug nell' OMIP"<<endl; 
     std::cout<<"Ho trovato  "<<errorF<<" Infeasible o bug NEL FMIP!!! "<<endl; 
-
+    std::cout<<"Ho trovato  "<<except<<" eccezioni tipo magnitude exeeded "<<endl; 
     return 0;
 }
 

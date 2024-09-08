@@ -19,6 +19,6 @@ Solution value = 0.000000
 
 
 Solution status = Optimal
-Solution value = 19938.000000
+Solution value = 9257.000000
 Risolto OMIP almeno ammissibile e slack a 0 --> Ho trovato una soluzione ammissibile per il MIP 
 Status OMIP :Optimal
