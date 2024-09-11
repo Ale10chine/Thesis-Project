@@ -1,0 +1,244 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 206.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 206.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 155199.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 206
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 154272.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 89
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 151798.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 89
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 151550.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 89
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 155812.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 89
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 153586.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 89
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 89.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 89.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 154362.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 88
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 0.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 0.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 147231.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 0
+
+OMIP resolved and slack are equal to 0 --> Found feasible solution for Mip 
+Status OMIP :Optimal
+ACS ended for../benchmark/tr12-30.mps.gz...
+

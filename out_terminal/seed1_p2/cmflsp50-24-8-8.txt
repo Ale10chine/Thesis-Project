@@ -1,0 +1,117 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 104.576205
+
+
+
+-------DeltaUB POST FMIP-----------: 100.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 54456518.769628
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 88
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 21.389415
+
+
+
+-------DeltaUB POST FMIP-----------: 17.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 63544190.331220
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 16
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 6.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 5.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 63532180.377763
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 2
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1.796101
+
+
+
+-------DeltaUB POST FMIP-----------: 1.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
+ACS ended for../benchmark/cmflsp50-24-8-8.mps.gz...
+

@@ -1,0 +1,94 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 424.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 420.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 398459.333333
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 407
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 31.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 31.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 960602.333333
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 27
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 0.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 0.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1100066.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 0
+
+OMIP resolved and slack are equal to 0 --> Found feasible solution for Mip 
+Status OMIP :Optimal
+ACS ended for../benchmark/timtab1.mps.gz...
+

@@ -1,0 +1,118 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4015972.420998
+
+
+
+-------DeltaUB POST FMIP-----------: 4015962.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 2778636624019.240234
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 4015957
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1583081.204592
+
+
+
+-------DeltaUB POST FMIP-----------: 1583076.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 3242188689264.255371
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 1583071
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 808191.571485
+
+
+
+-------DeltaUB POST FMIP-----------: 808188.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1656576222964.366699
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 808184
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 132173.641529
+
+
+
+-------DeltaUB POST FMIP-----------: 132171.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/snp-02-004-104.mps.gz...
+

@@ -1,0 +1,117 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1081.846154
+
+
+
+-------DeltaUB POST FMIP-----------: 1081.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 539.126200
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 1081
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 207.538462
+
+
+
+-------DeltaUB POST FMIP-----------: 198.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 256.349950
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 198
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 34.307692
+
+
+
+-------DeltaUB POST FMIP-----------: 13.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 128.710500
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 7
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 5.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 0.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
+ACS ended for../benchmark/neos-4387871-tavua.mps.gz...
+

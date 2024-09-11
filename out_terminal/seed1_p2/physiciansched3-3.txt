@@ -1,0 +1,118 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 26828.553333
+
+
+
+-------DeltaUB POST FMIP-----------: 26796.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 372303.871111
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 26670
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4463.890000
+
+
+
+-------DeltaUB POST FMIP-----------: 4453.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 104494.806667
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 4358
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1465.170000
+
+
+
+-------DeltaUB POST FMIP-----------: 1458.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 715114.147161
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 1423
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 810.403333
+
+
+
+-------DeltaUB POST FMIP-----------: 800.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/physiciansched3-3.mps.gz...
+

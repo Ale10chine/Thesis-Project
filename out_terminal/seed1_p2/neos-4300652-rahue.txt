@@ -1,0 +1,303 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 3162.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 3162.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 26.736900
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 3162
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 950.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 950.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 11.104500
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 950
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 412.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 412.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 5.698100
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 412
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 265.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 265.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4.268800
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 265
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 224.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 224.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4.569000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 224
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 190.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 190.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 6 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 5.220000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 190
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 173.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 173.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 7 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 6.290600
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 173
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 169.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 169.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 8 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 5.997900
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 169
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 9 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 159.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 159.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 9 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 6.799400
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 159
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 10 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 157.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 157.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 10 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 6.889300
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 157
+
+Iteration limit exceded --> Mip not resolved 
+ACS ended for../benchmark/neos-4300652-rahue.mps.gz...
+

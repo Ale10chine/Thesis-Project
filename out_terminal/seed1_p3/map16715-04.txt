@@ -1,0 +1,28 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 220499346.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 220499346.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/map16715-04.mps.gz...
+

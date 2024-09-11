@@ -1,0 +1,57 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 400.256655
+
+
+
+-------DeltaUB POST FMIP-----------: 273.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1417507.998580
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 57
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 53.017007
+
+
+
+-------DeltaUB POST FMIP-----------: 1.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
+ACS ended for../benchmark/uccase9.mps.gz...
+

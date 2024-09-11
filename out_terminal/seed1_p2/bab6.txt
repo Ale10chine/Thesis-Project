@@ -1,0 +1,118 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 196172.488970
+
+
+
+-------DeltaUB POST FMIP-----------: 196146.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = -1607531.488500
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 196119
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 28749.038970
+
+
+
+-------DeltaUB POST FMIP-----------: 28722.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = -2946255.009900
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 28703
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4199.250000
+
+
+
+-------DeltaUB POST FMIP-----------: 4179.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = -823222.781100
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 4147
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 973.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 973.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/bab6.mps.gz...
+

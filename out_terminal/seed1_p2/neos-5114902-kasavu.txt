@@ -1,0 +1,148 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 3613.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 3613.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 17.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 3613
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1170.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 1170.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 1170
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 513.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 513.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 0.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 513
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 400.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 400.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 0.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 400
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 240.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 207.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/neos-5114902-kasavu.mps.gz...
+

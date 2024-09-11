@@ -1,0 +1,147 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 51434.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 51292.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 173.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 51274
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 7604.392302
+
+
+
+-------DeltaUB POST FMIP-----------: 7496.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = -18.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 7483
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 4166.534590
+
+
+
+-------DeltaUB POST FMIP-----------: 4005.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = -197.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 3997
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 2823.814950
+
+
+
+-------DeltaUB POST FMIP-----------: 2406.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = -58.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 2401
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 1917.959503
+
+
+
+-------DeltaUB POST FMIP-----------: 1516.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
+ACS ended for../benchmark/satellites2-40.mps.gz...
+

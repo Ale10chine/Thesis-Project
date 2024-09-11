@@ -2,9 +2,18 @@
 #include <iostream>
 #include <filesystem>
 #include <sstream>
+#include <algorithm> 
+#include <cstring>   
 
-namespace fs = std::filesystem; // Creo un alias per semplicità
+//Only for test in cluster
+//#include "/home/chinelloal/Thesis Project/include/Utility.hpp"
 
+// I create an alias for semplicity
+namespace fs = std::filesystem; 
+
+/*
+    Function to read a problem from input by terminal
+*/
 std::string readCommandline(int argc, char **argv)
 {
     if (argc != 4)
@@ -16,6 +25,9 @@ std::string readCommandline(int argc, char **argv)
     return cmdline;
 }
 
+/*
+    Function to read in order of size (in byte) the problem of the benchmark set
+*/
 std::vector<std::string> readDirectory(const std::string &path)
 {
 
@@ -23,12 +35,14 @@ std::vector<std::string> readDirectory(const std::string &path)
     int i = 0;
     for (const auto &file : fs::directory_iterator(path))
     {
+        // Check if the file is regular
         if (fs::is_regular_file(file.status()))
-        {                                                                          // Controllo che il file sia regolare
-            problems.push_back("../benchmark/" + file.path().filename().string()); // Aggiunge il nome del path del file sottoformato di stringa al vettore di stringhe
+        {                                                                         
+            // Add the name of the file path on string format in the vector of string
+            problems.push_back("../benchmark/" + file.path().filename().string()); 
         }
     }
-    // Aggiungere ordinamento per grandezza dei file
+    //  Sorting for size (in byte) using a lambda function
     sort(problems.begin(), problems.end(), [](const std::string &s1, const std::string &s2)
          { return (fs::file_size(s1) < fs::file_size(s2)); });
 
@@ -39,8 +53,15 @@ std::vector<std::string> readDirectory(const std::string &path)
     return problems;
 }
 
-// Partendo da 13 sto puntando a questo elemento ../benchmark/problema1.mps
-//                                                            ^
+/*
+    Function to parse some path, putting the path name of the benchmark problem and a destination
+    this function will return a parser (the problem name without extension like .mps.gz) combined
+    with two type of extencion, that are .lp or .sol useful for print the model with the C++ API
+    function that is called "exportModel"
+
+    Starting from 13 i'm pointing at this element ../benchmark/problema1.mps
+                                                               ^
+*/
 std::string parserLog(const char *path, const char *dir, bool type)
 {
     std::string tmp;
@@ -50,13 +71,13 @@ std::string parserLog(const char *path, const char *dir, bool type)
         // cout << strlen(path) << endl;
         const char *c = path + i;
         if (*c == '.')
-        {
-            tmp = std::string(path).substr(13, i - 13); // ... = (inizio , lunghhezza sottostringa da estrarre)
+        {   
+            // ... = (start, dim of the substring thath will be extracted
+            tmp = std::string(path).substr(13, i - 13); 
             break;
         }
     }
-
-    // Selezione formato in base a se si tratta di soluzioni o di importazione modello
+    // Choice of the extenction  
     if (type)
     {
         tmp = dir + tmp + "_log.lp";
@@ -69,18 +90,26 @@ std::string parserLog(const char *path, const char *dir, bool type)
     return tmp;
 }
 
-std::string parserLog(const char *path, const char *dir) // dato un percorso "../benchmark/markshare_4_0.mps.gz" e il nome di una directory,
-                                                         // Torna dir + markshare_4_0 (senza estensione)
+/*
+    Overriding of the previous parserLog function, this will return only the name of the problem
+    without any extenton
+    
+    Input: "../benchmark/markshare_4_0.mps.gz" and a name of directory, will return
+    dir + "markshare_4_0" (without any extencion), where if dir is "" this function will return
+    only the name of the problem like "markashare_4_0"
+*/
+std::string parserLog(const char *path, const char *dir) 
 {
     std::string tmp;
     for (int i = 13; i < strlen(path); i++)
     {
 
-        // cout << strlen(path) << endl;
         const char *c = path + i;
         if (*c == '.')
         {
-            tmp = std::string(path).substr(13, i - 13); // ... = (inizio , lunghhezza sottostringa da estrarre)
+
+            // ... = (start, dim of the substring thath will be extracted
+            tmp = std::string(path).substr(13, i - 13); 
             break;
         }
     }
@@ -88,53 +117,54 @@ std::string parserLog(const char *path, const char *dir) // dato un percorso "..
     return dir + tmp;
 }
 
-void logAndPrint(std::ofstream &logFile, const std::string &message) {
-    std::cout << message;  // Stampa su terminale
-    logFile << message;    // Stampa su file
+void logAndPrint(std::ofstream &logFile, const std::string &message)
+{
+    // Print on terminal
+    std::cout << message;
+
+    // Print on file log
+    logFile << message;
 }
 
 // Funzione che cerca il nome dell'istanza e restituisce StatusStat e ObjectiveObje
+/*
+    Function thath given a porblem name like "markshare_4_0" search in the "BencharkSet.csv"
+    the corrispondent row for memorize two useful parameter, that are the optimal value of the 
+    objective function, and the type of the problem like hard, open or easy. For a better 
+    understanding it is advisable to open and watch the structore of this .csv
+*/
 std::vector<std::string> searchInstanceInCSV(const std::string &instanceName) {
     std::ifstream file("../BenchmarkSet.csv");
     std::string line, instance, status, objective;
     std::vector<std::string> data;
 
     if (file.is_open()) {
-        // Leggi e ignora la prima riga di intestazioni
+        // Open and readonly the first line, ignoring that line
         std::getline(file, line);
 
-        //int i = 1;
-        //std::cout << "FALG 1 \n";
-
-        // Leggi il CSV riga per riga
+        // Read the csv line by line
         while (std::getline(file, line)) {
             std::istringstream ss(line);
             std::string temp;
 
-            //std::cout << "FALG 2: " << i++ << "  ";
-
-            // Leggi la prima colonna (InstanceInst.)
+            // Read the first column (InstanceInst.) 
             instance = readQuotedCSVValue(ss);
-            //std::cout << "Nella colonna leggo: " << instance << "\n";
 
-            // Se l'istanza corrisponde, cattura i valori di StatusStat e ObjectiveObje
+            // If we found the row we capture the ObjValue and the type of the problem 
             if (instance == instanceName) {
-                //std::cout << "FALG 3 \n";
 
-                // Leggi la seconda colonna (StatusStat.)
+                // Read the second column that is (StatusStat.), so the type of the problem
                 status = readQuotedCSVValue(ss);
 
-                // Salta le colonne intermedie
+                // Skip the intermediate columns 
                 for (int i = 0; i < 8; ++i) {
                     readQuotedCSVValue(ss);
                 }
 
-                // Leggi l'undicesima colonna (ObjectiveObje.)
+                // Read the eleven column that is (ObjectiveObje.), so the optimal value of obj.f.
                 objective = readQuotedCSVValue(ss);
 
-                // Stampa i risultati
-                //std::cout << "Status: " << status << "\nObjective: " << objective << std::endl;
-
+                // Storing data in a vector for returing in main function
                 data.push_back(objective);
                 data.push_back(status);
 
@@ -151,29 +181,37 @@ std::vector<std::string> searchInstanceInCSV(const std::string &instanceName) {
     return data;
 }
 
-// Funzione per leggere un valore da un CSV che è racchiuso tra virgolette
+/*
+    Function to read a value from a .csv file that is enclosed in quotation marks (" "),
+    this function is useful for the parsing and for the read of data in the previously function 
+    "searchInstanceInCSV"
+*/
 std::string readQuotedCSVValue(std::istringstream &ss) {
     std::string value;
     char ch;
 
-    // Assumi che il valore inizi con una virgolette
+    // For the structor of BenchmarkSet.csv we already kown that every istance start whit "" 
     if (ss.get(ch) && ch == '"') {
         while (ss.get(ch) && ch != '"') {
             value += ch;
         }
     }
     
-    // Controlla il carattere successivo dopo le virgolette
-    // (può essere una virgola, fine riga o altro)
+    // Check the char after the "" that could be a , 
     if (ss.peek() == ',') {
-        ss.get(); // Consuma la virgola
+        // Skip the ,
+        ss.get(); 
     }
 
     return value;
 }
 
-
-void csvPrintLine(std::ofstream &csv, std::string probName, std::string status, std::string time, std::string objACS, std::string objOp, std::string type, std::string primalGap)
+/*
+    Function to print the data row of each problem in the csv file with the stats catched from
+    ACS computation
+*/
+void csvPrintLine(std::ofstream &csv, std::string probName, std::string status, std::string time,
+                  std::string iteraction, std::string objACS, std::string objOp, std::string type, std::string primalGap)
 {
     if(status != "Feasible"){
         //time = " / ";
@@ -182,10 +220,11 @@ void csvPrintLine(std::ofstream &csv, std::string probName, std::string status, 
     }
 
     csv << "\"" << probName << "\","
+        << "\"" << type << "\","
         << "\"" << status << "\","
         << "\"" << time << "\","
+        << "\"" << iteraction << "\","
         << "\"" << objACS << "\","
         << "\"" << objOp << "\","
-        << "\"" << type << "\","
         << "\"" << primalGap << "\"\n";
 }

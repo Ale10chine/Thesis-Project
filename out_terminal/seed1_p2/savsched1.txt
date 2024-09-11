@@ -1,0 +1,143 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 59201.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 59201.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 2.100000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 57005
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1952.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 1952.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 48025.700000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 316
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 49.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 49.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 57679.500000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 5
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 1.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 316591.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 0
+
+
+
+
+-------DeltaUB POST FMIP-----------: 0.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 38800.200000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 0
+
+OMIP resolved and slack are equal to 0 --> Found feasible solution for Mip 
+Status OMIP :Feasible
+ACS ended for../benchmark/savsched1.mps.gz...
+

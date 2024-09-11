@@ -1,0 +1,118 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 154047.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 154047.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 155.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 154047
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 22072.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 22072.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 178.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 22072
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 2256.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 2256.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 152.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 2256
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 293.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 293.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/neos-631710.mps.gz...
+

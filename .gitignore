@@ -2,6 +2,10 @@
 .DS_Store
 prova
 myenv/
+40%Cluster.csv
+65%Cluster.csv
+out/
+sol/
 acs
 *.o
 *.sol

@@ -1,0 +1,80 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 450737786034.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 450737786034.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 155950529524.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 450737786034
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 52498015361.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 52498015361.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 49273415996.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 52498015361
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 9123989433.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 9123989433.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+

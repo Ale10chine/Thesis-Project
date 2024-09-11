@@ -1,0 +1,57 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 22.867673
+
+
+
+-------DeltaUB POST FMIP-----------: 20.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 12566.768160
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 18
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 11.111756
+
+
+
+-------DeltaUB POST FMIP-----------: 10.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Infeasible
+Problema del bug, l'OMIP è risultato infeasible
+ACS ended for../benchmark/cbs-cta.mps.gz...
+

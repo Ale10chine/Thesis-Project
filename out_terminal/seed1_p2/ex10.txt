@@ -1,0 +1,208 @@
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 7901.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 7901.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 1 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 1508.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 7901
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 2 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 2172.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 2172.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 2 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 353.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 2172
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 3 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 670.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 670.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 3 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 97.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 670
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 4 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 227.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 227.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 4 --------------------
+
+
+
+
+
+Solution status = Optimal
+Solution value = 25.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 227
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 5 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 198.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 198.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 5 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 89.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 198
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 6 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 170.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 170.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 6 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 68.000000
+
+
+
+----DeltaUB post OMIP (quella controlla per entrare nel if) = 170
+
+
+
+
+ ---------------- RISOLUZIONE MODELLO FMIP : 7 --------------------
+
+
+
+
+
+Solution status = Feasible
+Solution value = 161.000000
+
+
+
+-------DeltaUB POST FMIP-----------: 161.000000
+
+
+ ---------------- RISOLUZIONE MODELLO OMIP: 7 --------------------
+
+
+
+
+
+Solution status = Unknown
+TimeLimit Exceeded for the OMIP --> Mip not resolved 
+ Status OMIP :Unknown
+ACS ended for../benchmark/ex10.mps.gz...
+
