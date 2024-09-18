@@ -185,7 +185,7 @@ int main(int argc, char **argv)
     {
         // Saving the path of the problem in a temporaneos variable
         const char *path = problems[p].c_str();
-        cout<< problems[p]<< endl;
+        std::cout<< problems[p]<< endl;
         
         //  Costruction of a CPLEX enviroment
         IloEnv env;
@@ -1071,8 +1071,9 @@ void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, co
     // Vars
     for (int i = 0; i < v.getSize(); i++)
     {
-        env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() <<"   " <<v[i].getLb() << " <= " << v[i].getName() << " <= " <<v[i].getUb();
-        env.out() << endl;
+        env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() <<"   " 
+                  << v[i].getLb() << " <= " << v[i].getName() << " <= " <<v[i].getUb()<<endl;
+        
     }
     env.out() << endl;
     // Constraints
@@ -1109,8 +1110,8 @@ void printVar(IloEnv &env, const IloNumVarArray &v)
 {
     for (int i = 0; i < v.getSize(); i++)
     {
-        env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() << "   " << v[i].getLb() << " <= " << v[i].getName() << " <= " << v[i].getUb();
-        env.out() << endl;
+        env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() << "   " 
+                  << v[i].getLb() << " <= " << v[i].getName() << " <= " << v[i].getUb() << endl;
        
     }
     env.out() << endl;

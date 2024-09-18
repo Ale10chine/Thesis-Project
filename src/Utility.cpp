@@ -18,7 +18,7 @@ std::string readCommandline(int argc, char **argv)
 {
     if (argc != 4)
     {
-        std::cout << "Inserire un unico file: \"./fileoggetto filedata.msp.gz\"" << std::endl;
+        std::cout << "Insert unique file : \"./objectfile filedata.msp.gz\"" << std::endl;
         return "";
     }
     std::string cmdline = "../benchmark/" + std::string(argv[1]); // Conversione argv[1] che è un char * in una std::string
@@ -174,10 +174,10 @@ std::vector<std::string> searchInstanceInCSV(const std::string &instanceName) {
 
         file.close();
     } else {
-        std::cerr << "Errore nell'apertura del file!" << std::endl;
+        std::cerr << "Error opening the file" << std::endl;
     }
 
-    std::cout << "Instance: " << instanceName << " non trovato nel CSV!" << std::endl;
+    std::cout << "Instance: " << instanceName << " doesn't find in CSV" << std::endl;
     return data;
 }
 

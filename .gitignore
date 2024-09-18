@@ -1,16 +1,9 @@
 .vscode/
 .DS_Store
+prova.cpp
 prova
 acs
 myenv/
-
-*.csv
-!BenchmarkSet.csv
-*.png
-
-out/
-sol/
 *.o
-*.sol
-*.lp
+
 

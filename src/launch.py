@@ -10,7 +10,7 @@ job_files = [f for f in os.listdir(jobs_dir) if f.endswith('.sh')]
 # Launch every job 
 for job_file in job_files:
     job_path = os.path.join(jobs_dir, job_file)
-    print(f"Lancio il job: {job_file}")
+    print(f"Submit job: {job_file}")
 
     # Compatibility with Python 3.6
     result = subprocess.run(['sbatch', '--wckey=rop', '--requeue', job_path],
@@ -22,4 +22,4 @@ for job_file in job_files:
     print(result.stdout)
     print(result.stderr)
 
-print("Tutti i job sono stati lanciati.")
+print("All jobs have been launched")
