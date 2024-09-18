@@ -1,4 +1,12 @@
 # Thesis-Project
+## General Notes
+
+In order to an implementative choice, in the code, it is used the camelCase notation for coherence with
+the CPLEX library although it is not the native notation of C++. 
+
+
+## How to compile
+
 Command to compile a file in Cluster, after login in `login.dei.unipd.it` log in `arrow-16.dei.unipd.it` for compile for getting the binary:
 
 First command :

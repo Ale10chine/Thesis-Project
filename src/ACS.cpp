@@ -48,7 +48,10 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
 void restoreBounds(IloNumVarArray &v, const IloIntArray &setF,
                    const std::vector<std::pair<IloNum, IloNum>> &bounds, int paramPercentage);
 
-IloInt deltaCalculator(IloInt delta, const std::vector<IloNumArray> &sVec, const IloInt &m);
+IloNum deltaCalculator(IloNum &delta, const std::vector<IloNumArray> &sVec, const IloInt &m);
+
+
+IloNum deltaCalculator(const std::vector<IloNumArray> &sVec, const IloInt &m);
 
 std::string primalGapCalculator(std::string objVal1, std::string objVal2);
 
@@ -62,6 +65,13 @@ void printObj(IloEnv &env, const IloObjective &o);
 void printVar(IloEnv &env, const IloNumVarArray &v);
 void printRng(IloEnv &env, const IloRangeArray &r);
 
+void printVector(IloEnv &env, const std::vector<IloNumArray> &v, IloInt n);
+
+
+// Define de T parameter and C parameter, seed and percentage parameter 
+// will be passed from the command line
+constexpr int T_LIM = 30;
+constexpr int C_ITER = 10;
 
 // Main function
 int main(int argc, char **argv)
@@ -72,12 +82,12 @@ int main(int argc, char **argv)
     const char *msg;
 
     // Counters to keep track of the type of results to which ACS converges
-    int risolti = 0;
+    int resolved = 0;
     int timeLimit = 0;
     int iterLimit = 0;
-    int error = 0;
-    int errorF = 0; // Errori nel FMIP dovrebbero sempre rimanere a 0
-    int except = 0; // Eccezione della mafnitudine
+    int error = 0; // (*)
+    int errorF = 0; // (*)
+    int except = 0; // (*)
 
     // Number of problem to resolve (cycle / 240 max) and p is the current indices of the problem
     int cycle; 
@@ -107,9 +117,9 @@ int main(int argc, char **argv)
     }
     else
     {
-        std::cerr << "\nErrore nell' immissione dei dati in input, riprova nel seguente formato: \n"
-                  << "/eseguibile seed percentuale \n"
-                  << "/eseguibile problema.mps.gz seed percentuale \n" 
+        std::cerr << "\nError entering the input data, try again in the following format: \n"
+                  << "/executable \'seed\' \'percentage\' \n"
+                  << "/executable \'problem.mps.gz\' \'seed\' \'percentage\' \n" 
                   << std::endl;
         return 1;
     }
@@ -120,7 +130,8 @@ int main(int argc, char **argv)
     // Static decision for match a correct subpath for the directory of log like
     // out_csv, out_problem, out_terminal
     std::string subPath;
-    if(seed == 12345){
+
+    if(seed == 12345){ // seed1
         if(percentage < 0.3){
             subPath = "seed1_p1/";
         }else if(percentage > 0.3 and percentage < 0.6){
@@ -129,7 +140,26 @@ int main(int argc, char **argv)
             subPath = "seed1_p3/";
         }
     }
-     
+
+    if(seed == 54321){ // seed2
+        if(percentage < 0.3){
+            subPath = "seed2_p1/";
+        }else if(percentage > 0.3 and percentage < 0.6){
+            subPath = "seed2_p2/";
+        }else if(percentage > 0.6){
+            subPath = "seed2_p3/";
+        }
+    }
+
+    if(seed == 1){ // seed3
+        if(percentage < 0.3){
+            subPath = "seed3_p1/";
+        }else if(percentage > 0.3 and percentage < 0.6){
+            subPath = "seed3_p2/";
+        }else if(percentage > 0.6){
+            subPath = "seed3_p3/";
+        }
+    }
 
     // Declaration of time variables to measure the computation time of the algorithm for a given problem
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
@@ -155,6 +185,7 @@ int main(int argc, char **argv)
     {
         // Saving the path of the problem in a temporaneos variable
         const char *path = problems[p].c_str();
+        cout<< problems[p]<< endl;
         
         //  Costruction of a CPLEX enviroment
         IloEnv env;
@@ -165,7 +196,7 @@ int main(int argc, char **argv)
 
         if (!logFile.is_open())
         {
-            std::cerr << "Errore nell'appertura del file di log dell'esecuzione di ACS"<< std::endl;
+            std::cerr << "Error opening ACS execution log file"<< std::endl;
             return 1;
         }
 
@@ -184,9 +215,7 @@ int main(int argc, char **argv)
         {
             ///////++++++ FMIP ++++++////////
             IloModel fmip(env);
-            IloCplex cplexFmip(env);
-
-            cplexFmip.setParam(IloCplex::TiLim, 30);
+            IloCplex cplexFmip(env); // In teoria questo serve solo per riempire il modello
 
             // Declaration of some Extractables object for the FMIP sub-problem
             IloObjective objF(env);
@@ -203,9 +232,7 @@ int main(int argc, char **argv)
 
             ///////++++++ OMIP +++++++////////
             IloModel omip(env);
-            IloCplex cplexOmip(env);
-
-            cplexOmip.setParam(IloCplex::TiLim, 30);
+            IloCplex cplexOmip(env); // In teoria questo serve solo per riempire il modello
 
             // Declaration of some Extractables object for the OMIP model
             IloObjective objO(env);
@@ -302,7 +329,7 @@ int main(int argc, char **argv)
                 }
                 else
                 {
-                    env.out() << "Errore nella creazione di FMIP" << endl;
+                    env.out() << "Error in the creation of FMIP" << endl;
                 }
 
                 rngF[i].setExpr(expr);
@@ -381,7 +408,7 @@ int main(int argc, char **argv)
             // Boolean variable for the first entrance in FMIP
             bool init = true; 
             // Initialising the DeltaUb variable for enter in the algorithm
-            deltaUB = 1;
+            deltaUB = 0.1;
             // Initialising the iteration counter of the ACS
             int counter = 0;
 
@@ -400,11 +427,11 @@ int main(int argc, char **argv)
             // Starting to mesure the time of computation of the ACS on problem i
             start = std::chrono::high_resolution_clock::now();
 
-            while (deltaUB != 0 and counter < 10) 
+            while (deltaUB != 0 and counter < C_ITER) 
             {
                 
                 // FMIP condition, if deltaUB = 0 the FMIP is not processed, only OMIP
-                if (deltaCalculator(deltaUB, startingVector, m) > 0 || init)
+                if (deltaCalculator(startingVector, m) > 0 or init)
                 {
                     // -------------------- RESOLUTION OF THE FMIP -----------------------
                     // -------------------------------------------------------------------
@@ -426,10 +453,13 @@ int main(int argc, char **argv)
                     // values ​​of the starting vector or with the values ​​of the solutions after the first iteration
                     variableFixing(varF, setI, setF, randomVec, startingVector, startBounds, paramPercentage);
 
+                    IloCplex cplexFmip(env);
+                    cplexFmip.setParam(IloCplex::TiLim, T_LIM);
 
                     // Extraction of the model with C++ API, for the creation of the matrix that
                     // are needet from Cplex
                     cplexFmip.extract(fmip);
+
 
                     // Print the FMIP model in log file .lp
 /*
@@ -437,7 +467,7 @@ int main(int argc, char **argv)
                     msg = s.c_str();
                     cplexFmip.exportModel(msg); 
 */
-                    logAndPrint(logFile,"\n\n\n ---------------- RISOLUZIONE MODELLO FMIP : " 
+                    logAndPrint(logFile,"\n\n\n ---------------- RESOLUTION FMIP MODEL : " 
                                  + std::to_string(counter +1) + " --------------------\n\n\n");
                     
                     // Call to the Cplex resolutor
@@ -449,6 +479,7 @@ int main(int argc, char **argv)
                     objFval = cplexFmip.getObjValue();
                     cplexFmip.getValues(valsF, varF);
 
+
                     // Managing of the FMIP status
                     if(AstatusF == IloAlgorithm::Infeasible){ 
                         solvFmip = false;
@@ -457,20 +488,17 @@ int main(int argc, char **argv)
 
                     if (statusF == IloCplex::AbortTimeLim)
                     {
-                        env.out() << "\n\nHo abortito per via del tempo nell' FMIP ma continuo "
-                                  << "in quanto in teroia dovrebbe essere feasible " << endl;
-
-                            if (AstatusF == IloAlgorithm::Feasible)
+                        if (AstatusF == IloAlgorithm::Feasible)
                         {
-                            env.out() << " Si almeno e' feasible" << endl;
+                            env.out() << " FMIP feasible" << endl;
                         }
                         else if (AstatusF == IloAlgorithm::Optimal)
                         {
-                            env.out() << "Addirittura e' ottimo" << endl;
+                            env.out() << "FMIP optimal" << endl;
                         }
                         else
                         {
-                            env.out() << "FMIP infeasible, NON TORNA" << endl;
+                            env.out() << "FMIP infeasible" << endl;
                             solvFmip = false;
                             break;
                         }
@@ -479,7 +507,6 @@ int main(int argc, char **argv)
                     logAndPrint(logFile,"\n\n\nSolution status = "+ getStatusDescription(AstatusF) + "\n");
                     logAndPrint(logFile,"Solution value = "+ std::to_string(objFval) + "\n");
                     
-//                    env.out() << "Values = " << valsF << std::endl;
 
                     // Call to updateVector function to get the new update of the initial solution vector
                     // (the variable was called  startingVector), note that the solution vector,
@@ -491,6 +518,9 @@ int main(int argc, char **argv)
                     
                     // Cleaning of previously saved initial bounds 
                     startBounds.clear(); 
+
+                    // Dealloco le matrici create usando extract()
+                    cplexFmip.end();
                 }
 
                 //----------------------------------------------------------------------------------
@@ -500,9 +530,11 @@ int main(int argc, char **argv)
                 // -------------------------------------------------------------------
 
                 
-                deltaUB = deltaCalculator(deltaUB, startingVector, m);
-                logAndPrint(logFile, "\n\n\n-------DeltaUB POST FMIP-----------: " + std::to_string(deltaUB));
+                deltaCalculator(deltaUB, startingVector, m);
                 
+                logAndPrint(logFile, "\n\n\n DeltaUB POST FMIP: " 
+                            + std::to_string(deltaUB) + "\n\n");
+
                 // Update of the rispective costants DeltaUB in the last costrint of OMIP 
                 rngO[m].setBounds(rngO[m].getLb(), deltaUB); 
 
@@ -527,6 +559,8 @@ int main(int argc, char **argv)
                 variableFixing(varO, setI, setF, randomVec, startingVector, startBounds, paramPercentage);
 
 
+                IloCplex cplexOmip(env);
+                cplexOmip.setParam(IloCplex::TiLim, T_LIM);
                 // Extraction of the model with C++ API, for the creation of the matrix that
                 // are needet from Cplex
                 cplexOmip.extract(omip);
@@ -538,7 +572,7 @@ int main(int argc, char **argv)
                 cplexOmip.exportModel(msg); 
 */
 
-                logAndPrint(logFile,"\n\n\n ---------------- RISOLUZIONE MODELLO OMIP: "
+                logAndPrint(logFile,"\n\n\n ---------------- RESOLUTION OMIP MODEL: "
                              + std::to_string(counter +1) + " --------------------\n\n\n");
 
                     
@@ -572,7 +606,7 @@ int main(int argc, char **argv)
 
                 if (statusO == IloCplex::AbortTimeLim)
                 {
-                    env.out() << "Ho abortito Nel OMIP perchè superato il tempo limite" << endl;
+                    env.out() << "I aborted in OMIP because I exceeded the time limit" << endl;
                     if (AstatusO != IloAlgorithm::Feasible and AstatusO != IloAlgorithm::Optimal)
                     {
                         solvOmip = false; // Time limit exceeded for this OMIP
@@ -586,6 +620,7 @@ int main(int argc, char **argv)
                 // in x^, is composed only with integer values
                 updateVector(env, setI, startingVector, valsO, n, m); 
 
+
                 // Call to the restoreBounds function for restore the initial bounds of the variable
                 restoreBounds(varO, setF, startBounds, paramPercentage);
 
@@ -596,10 +631,10 @@ int main(int argc, char **argv)
                 counter++;
 
                 // Print of the value at the before another itercation of the new FMIP
-                logAndPrint(logFile, "\n\n\n----DeltaUB post OMIP (quella controlla per entrare nel if) = " 
-                            + std::to_string(deltaCalculator(deltaUB, startingVector, m)) +"\n\n");
+                logAndPrint(logFile, "\n\n\n DeltaUB post OMIP: " 
+                            + std::to_string(deltaCalculator(startingVector, m)) +"\n\n");
 
-    
+                cplexOmip.end();
             }
 
             // End of mesuration of the time of computation of the ACS on problem i
@@ -612,17 +647,17 @@ int main(int argc, char **argv)
             // -------------------- MANAGING OF THE STATUS -----------------------
             // -------------------------------------------------------------------
             // ------------------------------------------------------------------- 
-            if (!solvFmip) // theoretically it should never happen
+            if (!solvFmip) // theoretically it should never happen (*)
             {
-                logAndPrint(logFile, "Problema del bug, l'FMIP è risultato infeasible IMPOSSIBILE!\n");
+                logAndPrint(logFile, "FMIP bug, infeasible\n");
                 statusCSV = "Bug FMIP";
                 errorF++;
             }
             else if (!solvOmip)
             {
-                if (AstatusO == IloAlgorithm::Infeasible) // theoretically it should never happen
+                if (AstatusO == IloAlgorithm::Infeasible) // theoretically it should never happen (*)
                 {
-                    logAndPrint(logFile, "Problema del bug, l'OMIP è risultato infeasible\n");
+                    logAndPrint(logFile, "OMIP bug, infeasible\n");
                     statusCSV = "Bug OMIP";
                     error++;
                 }
@@ -640,9 +675,9 @@ int main(int argc, char **argv)
                 logAndPrint(logFile, "Status OMIP :" + getStatusDescription(AstatusO) + "\n");
                 statusCSV = "Feasible";
                 objACSCSV = std::to_string(objOval);
-                risolti++;
+                resolved++;
             }
-            else if (counter == 10)
+            else if (counter == C_ITER)
             {
                 logAndPrint(logFile, "Iteration limit exceded --> Mip not resolved \n");
                 statusCSV = "Solution not found (iteration limit exceded)";
@@ -675,7 +710,7 @@ int main(int argc, char **argv)
         catch (IloException &e)
         {
             std::cerr << "Concert exception caught: " << e << endl;
-            except++;
+            except++; // (*)
         }
         catch (...)
         {
@@ -691,12 +726,14 @@ int main(int argc, char **argv)
     // Close the .csv file after the printation of all data from all problem
     csv.close();
 
-    std::cout<<"Ho risolto : "<<risolti<<" Problemi, cioe' trovo una soluzione ammissibile per il loro MIP"<<endl;
-    std::cout<<"Non sono riuscito a risolvere : "<<iterLimit <<" Problemi, in quanto hanno sforato le iterazioni massime"<<endl;
-    std::cout<<"Non sono riuscito a risovlere : "<<timeLimit<<" Problemi perchè non ho trovato una sol. ammissibile per il OMIP nella soglia di tempo con le slack > 0"<<endl;
-    std::cout<<"Ho trovato  "<<error<<" Infeasible o bug nell' OMIP"<<endl; 
-    std::cout<<"Ho trovato  "<<errorF<<" Infeasible o bug NEL FMIP!!! "<<endl; 
-    std::cout<<"Ho trovato  "<<except<<" eccezioni tipo magnitude exeeded "<<endl; 
+    // The case signed with this symbol are (*) impossible, so the cheek is only for debugging
+    std::cout<<"Resolved : "<<resolved<<endl;
+    std::cout<<"Not resolved : "<<iterLimit <<" for Iteration limit exceeded"<<endl;
+    std::cout<<"Not resolved : "<<timeLimit<<" for Time limit exceded"<<endl;
+    //std::cout<<"Bug  "<<error<<" Infeasible OMIP"<<endl; 
+    //std::cout<<"Bug  "<<errorF<<" Infeasible FMIP "<<endl; 
+    //std::cout<<"Bug  "<<except<<" Magnitude exeeded "<<endl; 
+
     return 0;
 }
 
@@ -727,15 +764,16 @@ std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloIntArray &se
         {
             IloInt lb = static_cast<IloInt>(v[i].getLb());
             IloInt ub = static_cast<IloInt>(v[i].getUb());
+            
+            // For limit big scale to the solver that could cause problem in during resolution
+            if(ub > 100000) ub = 100000; // 100000 
+
             IloInt randomNumber = lb + (std::rand() % (ub - lb + 1)); // Generation of a pseudorando value between the bounds of the i variable
             x.add(static_cast<double>(randomNumber)); // Casting to double because x is an array of double (IloNumArray)
             setI.add(i);
      
         }
     }
-    //env.out() << "I = " << setI << std::endl;
-    //env.out() << "x^ = " << x << "\t  dim x^ : " << x.getSize() << std::endl;
-
     // Creation of the starting vector[x^,delta+, delta-] with the x's still to be fixed and empty Delta (slacks) 
     std::vector<IloNumArray> sV;
     sV.push_back(x);
@@ -762,6 +800,21 @@ void printVector(IloEnv &env, const std::vector<IloNumArray> &v)
     env.out() << " [ ";
 
     for (int i = 0; i < v.size(); i++)
+    {
+        env.out() << "{ ";
+        for (int j = 0; j < v[i].getSize(); j++)
+        {
+            env.out() << v[i][j] << " ";
+        }
+        env.out() << "}";
+    }
+    env.out() << " ]" << endl;
+}
+void printVector(IloEnv &env, const std::vector<IloNumArray> &v, IloInt n)
+{
+    env.out() << " [ ";
+
+    for (int i = 1; i < v.size(); i++)
     {
         env.out() << "{ ";
         for (int j = 0; j < v[i].getSize(); j++)
@@ -837,38 +890,21 @@ void variableFixing(IloNumVarArray &v, const IloIntArray &setI, IloIntArray &set
                     const std::vector<IloInt> &rVec, const std::vector<IloNumArray> &sVec,
                     std::vector<std::pair<IloNum, IloNum>> &bounds, int paramPercentage)
 {
-
-    // Fissaggio delle variabili, Genero gli indici del setF, e memorizzazione dei bound iniziali
     for (int i = 0; i < paramPercentage; i++)
     {
-        
-        //std::cout << std::fixed << std::setprecision(5) << "Variabile che modifico in questo variable Fixing: " << v[setF[i]].getName() << " (Id " << v[setF[i]].getId() << " ) " << "con LB : " << sVec[0][rVec[i]] << " e UB :" << sVec[0][rVec[i]] << std::endl;
-    
         bounds.push_back({v[setF[i]].getLb(), v[setF[i]].getUb()}); // Memorize Lb and Ub from the variable with indices £ F
-        // env.out()<< "varF[ "<< setF[i] << " ] "<<"  Lb : "<<varF[setF[i]].getLb()<< " Ub : "<< varF[setF[i]].getUb()<< endl;
-
         IloInt a = IloRound(sVec[0][rVec[i]]); // IloInt <- IloNum, fixing variable are surely integer
-        //IloNum a = sVec[0][rVec[i]]; // IloNum <- IloNum
 
-        // For strange problem that Cplex can give
+        // (Optional prevention) security control in case of particular error from cplex
         if(a < v[setF[i]].getLb()){
             a = v[setF[i]].getLb();
-            std::cout<<"\n\nHo aggiornato a con LB , qualcosa non andava\n\n";
         }else if(a > v[setF[i]].getUb()){
             a = v[setF[i]].getUb();
-            std::cout<<"\n\n Ho aggiornato a con UB, qualcosa non andava\n\n";
         }
 
         // Setting the new bounds, the varible with indices £ F is now fixed
         v[setF[i]].setBounds(a,a); 
-        //v[setF[i]].setLB(a);
-        //v[setF[i]].setUB(a);
-   
-        //v[setF[i]].setBounds(sVec[0][rVec[i]],sVec[0][rVec[i]]); // Fisso la variabile, ovvero setto entrambi i bound con il valore salvato in x^
-        //v[setF[i]].setBounds(std::ceil(sVec[0][rVec[i]]),std::ceil(sVec[0][rVec[i]])); // Fisso la variabile, ovvero setto entrambi i bound con il valore salvato in x^
-        
-        //std::cout<<"Dopo la riga di codice che fissa , "<<v[setF[i]].getName()<<" (Id "<<v[setF[i]].getId()<<" è fissata a LB : "<<v[setF[i]].getLb()<<" e UB: "<<v[setF[i]].getUb()<<endl;
-        
+       
     }
 }
 
@@ -881,13 +917,13 @@ void setFGenerator(const IloIntArray &setI, IloIntArray &setF,
 {
     for (int i = 0; i < paramPercentage; i++)
     {
-        setF.add(setI[rVec[i]]); // Memorizzo gli indici di I in F (F c I)
+        setF.add(setI[rVec[i]]); // Memorize of the index of I in F (F c I)
     }
 }
 
 /*
     UpdateVector algorithm, is used for update the initial vector , in main called "startingVector",
-    for understand his procedure we have to print. The fact is that is a "game" of indexes so it is
+    for understand his procedure we have to print it. The fact is that it's a "game" of indexes so it's
     difficoult to explain with only words
 */
 void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray> &sVec,
@@ -899,18 +935,13 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
     int j = 0;
     for (int i = 0; i < n; i++)
     {
-    //cout<<"flag = SetI[ "<<j<<" ] == "<<i<<endl;
-
         if (setI[j] == i)
         {
-            // env.out() << i << " ";
             sVec[0][j] = vals[i];
-            //            env.out() << " x :" << sVec[0][j] << endl;
             j++;
         }
         if (j == setI.getSize())
         {
-            //cout << "Brekko" << endl;
             break;
         }
     }
@@ -920,16 +951,13 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
     int c = 0;
     for (int i = n; i < 2 * m + n; i++, j++)
     {
-        
         if (j < m)
         {
             sVec[1][j] = vals[i];
-        // env.out() << " Delta+ :" << sVec[1][j] << " j :" << j << " i : " << i << endl;
         }
         else
         {
             sVec[2][c] = vals[i];
-        // env.out() << " Delta- :" << sVec[2][c] << " c :" << c << " j :" << j << " i : " << i << endl;
             c++;
         }
     }
@@ -954,17 +982,32 @@ void restoreBounds(IloNumVarArray &v, const IloIntArray &setF,
         }
     }
 }
-
 /*
     Function for deltaUB computation
 */
-IloInt deltaCalculator(IloInt delta, const std::vector<IloNumArray> &sVec,const IloInt &m)
+IloNum deltaCalculator(const std::vector<IloNumArray> &sVec, const IloInt &m){
+
+    IloNum delta = 0; // DeltaUB wil be restored for the new computation
+    for (int i = 0; i < m; i++)
+    {
+        IloNum tmp = sVec[1][i] + sVec[2][i];
+        delta = delta + tmp;
+    }
+
+    return delta;
+}
+/*
+    Function for deltaUB computation (version with modify for reference)
+*/
+IloNum deltaCalculator(IloNum &delta, const std::vector<IloNumArray> &sVec,const IloInt &m)
 {
     delta = 0; // DeltaUB wil be restored for the new computation
     for (int i = 0; i < m; i++)
     {
-        delta += sVec[1][i] + sVec[2][i];
+        IloNum tmp = sVec[1][i] + sVec[2][i];
+        delta = delta + tmp;
     }
+
     return delta;
 }
 
@@ -1000,19 +1043,17 @@ std::string primalGapCalculator(std::string objVal1, std::string objVal2){
 
     double primalGap;
 
-    double oACS = stod(objVal1);// c^T*x^
-    double oOp = stod(objVal2); // c^T*x
+    double oACS = stod(objVal1); // c^T*x^
+    double oOp = stod(objVal2);  // c^T*x
 
-    if(std::fabs(oACS) == std::fabs(oOp)){ //case |c^T*x^| = |c^T*x^|
+    if(std::fabs(oACS) == std::fabs(oOp)){  //case |c^T*x^| = |c^T*x^|
         primalGap = 0;
-    }else if(oACS * oOp < 0){ // case c^T*x^ * c^T*x < 0
+    }else if(oACS * oOp < 0){  // case c^T*x^ * c^T*x < 0
         primalGap = 1;
-    }else { // otherwise
+    }else {  // otherwise
         primalGap = (std::fabs(oACS - oOp))/(std::fmax(std::fabs(oACS),std::fabs(oOp)));
     }
     
-    //cout<<"\n\nPrimal GAP : "<<primalGap<<endl;
-
     return std::to_string(primalGap);
 
 }
@@ -1021,9 +1062,12 @@ std::string primalGapCalculator(std::string objVal1, std::string objVal2){
 // ---------------------------- FUNCTION FOR DEBUGGING -------------------------------------------//
 // -----------------------------------------------------------------------------------------------//
 
+/*
+    Function to print variable of the model 
+*/
 void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, const IloObjective &o){
     // Obj
-    env.out() <<"Nome: "<<o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl << endl;
+    env.out() <<"Name: "<<o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl << endl;
     // Vars
     for (int i = 0; i < v.getSize(); i++)
     {
@@ -1049,44 +1093,51 @@ void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, co
     env.out() << endl;
 
 }
-
+/*
+    Function to print only function objective of the model
+*/
 void printObj(IloEnv &env, const IloObjective &o)
 {
-    env.out() << "Nome: " << o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl
+    env.out() << "Name: " << o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl
               << endl;
 }
 
+/*
+    Function to print only variable of the model
+*/
 void printVar(IloEnv &env, const IloNumVarArray &v)
 {
     for (int i = 0; i < v.getSize(); i++)
     {
         env.out() << v[i].getName() << " " << v[i].getType() << "  " << v[i].getId() << "   " << v[i].getLb() << " <= " << v[i].getName() << " <= " << v[i].getUb();
         env.out() << endl;
-
        
     }
     env.out() << endl;
 }
 
+/*
+    Function to print only costraints of the model
+*/
 void printRng(IloEnv &env, const IloRangeArray &r)
 {
-    // Stampa Range
+    // Scrool every range 
     for (int i = 0; i < r.getSize(); i++)
     {
-        // Estrai l'espressione dal vincolo corrente
+        // Extraction of the expression from the current costraint
         IloExpr expr = r[i].getExpr();
         bool first = true;
 
-        // Itera sui termini nell'espressione
+        // Iteration on terms of the i-range
         for (IloExpr::LinearIterator it = expr.getLinearIterator(); it.ok(); ++it)
         {
-            // Ottieni la variabile corrente
+            // Get current variable
             IloNumVar v = it.getVar();
 
-            // Ottieni il coefficiente della variabile
+            // And get her coefficent 
             double coeff = it.getCoef();
 
-            // Stampa il coefficiente, il nome della variabile e il suo ID
+            // Print the variable with respective id (useful for duplicate variable debugging) 
 
             if (!first)
             {
@@ -1097,7 +1148,7 @@ void printRng(IloEnv &env, const IloRangeArray &r)
             env.out() << coeff << " * " << v.getName() << "(" << v.getId() << ")";
         }
 
-        // Stampa la parte destra del vincolo
+        //  Print the right side of the costraint
         if (r[i].getLb() == r[i].getUb())
         {
             env.out() << " = " << r[i].getLb();
@@ -1118,7 +1169,7 @@ void printRng(IloEnv &env, const IloRangeArray &r)
         env.out() << endl
                   << endl;
 
-        // Rilascia l'espressione per evitare perdite di memoria
+        //  Release of the expression for a correct management of the memory
         expr.end();
     }
 }
@@ -1133,5 +1184,4 @@ g++ Utility.o ACS.o  -o acs -lilocplex -lconcert -lcplex -lm -lpthread -Wno-depr
 
 ./acs markshare_4_0.mps.gz
 */
-
 

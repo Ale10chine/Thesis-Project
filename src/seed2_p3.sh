@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=job3
+#SBATCH --job-name=job6
 #SBATCH --partition=razor
 #SBATCH --ntasks=1
 #SBATCH --mem=14GB
@@ -12,7 +12,7 @@ ulimit -v 16777216
 
 
 # Command to execute
-./prova3 12345 65 
+./prova6 54321 65 
 
 # back to power saving mode
 sudo cpupower frequency-set -g powersave

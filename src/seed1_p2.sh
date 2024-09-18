@@ -12,12 +12,7 @@ ulimit -v 16777216
 
 
 # Command to execute
-g++ -I/nfsd/rop/sw/ibm/cos221/concert/include -I/nfsd/rop/sw/ibm/cos221/cplex/include -Wno-deprecated-declarations -std=c++17 -c Utility.cpp -o Utility.o
-g++ -I/nfsd/rop/sw/ibm/cos221/concert/include -I/nfsd/rop/sw/ibm/cos221/cplex/include -Wno-deprecated-declarations -std=c++17 -c prova.cpp -o prova.o
-
-g++ Utility.o prova.o  -o prova -L/nfsd/rop/sw/ibm/cos221/cplex/lib/x86-64_linux/static_pic/ -L/nfsd/rop/sw/ibm/cos221/concert/lib/x86-64_linux/static_pic/  -lilocplex -lconcert -lcplex -lm -lpthread -Wno-deprecated-declarations
-
-./prova 12345 40 
+./prova2 12345 40 
 
 # back to power saving mode
 sudo cpupower frequency-set -g powersave

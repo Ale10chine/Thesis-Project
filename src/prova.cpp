@@ -48,7 +48,10 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
 void restoreBounds(IloNumVarArray &v, const IloIntArray &setF,
                    const std::vector<std::pair<IloNum, IloNum>> &bounds, int paramPercentage);
 
-IloInt deltaCalculator(IloInt delta, const std::vector<IloNumArray> &sVec, const IloInt &m);
+IloNum deltaCalculator(IloNum &delta, const std::vector<IloNumArray> &sVec, const IloInt &m);
+
+
+IloNum deltaCalculator(const std::vector<IloNumArray> &sVec, const IloInt &m);
 
 std::string primalGapCalculator(std::string objVal1, std::string objVal2);
 
@@ -62,6 +65,7 @@ void printObj(IloEnv &env, const IloObjective &o);
 void printVar(IloEnv &env, const IloNumVarArray &v);
 void printRng(IloEnv &env, const IloRangeArray &r);
 
+void printVector(IloEnv &env, const std::vector<IloNumArray> &v, IloInt n);
 
 // Main function
 int main(int argc, char **argv)
@@ -120,7 +124,8 @@ int main(int argc, char **argv)
     // Static decision for match a correct subpath for the directory of log like
     // out_csv, out_problem, out_terminal
     std::string subPath;
-    if(seed == 12345){
+
+    if(seed == 12345){ // seed1
         if(percentage < 0.3){
             subPath = "seed1_p1/";
         }else if(percentage > 0.3 and percentage < 0.6){
@@ -129,7 +134,28 @@ int main(int argc, char **argv)
             subPath = "seed1_p3/";
         }
     }
-     
+
+    if(seed == 54321){ // seed2
+        if(percentage < 0.3){
+            subPath = "seed2_p1/";
+        }else if(percentage > 0.3 and percentage < 0.6){
+            subPath = "seed2_p2/";
+        }else if(percentage > 0.6){
+            subPath = "seed2_p3/";
+        }
+    }
+
+    if(seed == 1){ // seed3
+        if(percentage < 0.3){
+            subPath = "seed3_p1/";
+        }else if(percentage > 0.3 and percentage < 0.6){
+            subPath = "seed3_p2/";
+        }else if(percentage > 0.6){
+            subPath = "seed3_p3/";
+        }
+    }
+
+    std::cout<<subPath<<endl; 
 
     // Declaration of time variables to measure the computation time of the algorithm for a given problem
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
@@ -155,6 +181,7 @@ int main(int argc, char **argv)
     {
         // Saving the path of the problem in a temporaneos variable
         const char *path = problems[p].c_str();
+        cout<< problems[p]<< endl;
         
         //  Costruction of a CPLEX enviroment
         IloEnv env;
@@ -184,9 +211,10 @@ int main(int argc, char **argv)
         {
             ///////++++++ FMIP ++++++////////
             IloModel fmip(env);
-            IloCplex cplexFmip(env);
+            IloCplex cplexFmip(env); // In teoria questo serve solo per riempire il modello
 
-            cplexFmip.setParam(IloCplex::TiLim, 30);
+
+            
 
             // Declaration of some Extractables object for the FMIP sub-problem
             IloObjective objF(env);
@@ -203,9 +231,9 @@ int main(int argc, char **argv)
 
             ///////++++++ OMIP +++++++////////
             IloModel omip(env);
-            IloCplex cplexOmip(env);
+            IloCplex cplexOmip(env); // In teoria questo serve solo per riempire il modello
 
-            cplexOmip.setParam(IloCplex::TiLim, 30);
+            
 
             // Declaration of some Extractables object for the OMIP model
             IloObjective objO(env);
@@ -381,7 +409,7 @@ int main(int argc, char **argv)
             // Boolean variable for the first entrance in FMIP
             bool init = true; 
             // Initialising the DeltaUb variable for enter in the algorithm
-            deltaUB = 1;
+            deltaUB = 0.1;
             // Initialising the iteration counter of the ACS
             int counter = 0;
 
@@ -404,7 +432,7 @@ int main(int argc, char **argv)
             {
                 
                 // FMIP condition, if deltaUB = 0 the FMIP is not processed, only OMIP
-                if (deltaCalculator(deltaUB, startingVector, m) > 0 || init)
+                if (deltaCalculator(startingVector, m) > 0 or init)
                 {
                     // -------------------- RESOLUTION OF THE FMIP -----------------------
                     // -------------------------------------------------------------------
@@ -426,10 +454,17 @@ int main(int argc, char **argv)
                     // values ​​of the starting vector or with the values ​​of the solutions after the first iteration
                     variableFixing(varF, setI, setF, randomVec, startingVector, startBounds, paramPercentage);
 
+                    IloCplex cplexFmip(env);
+                    cplexFmip.setParam(IloCplex::TiLim, 30);
 
                     // Extraction of the model with C++ API, for the creation of the matrix that
                     // are needet from Cplex
                     cplexFmip.extract(fmip);
+
+                    //std::cout<<"PRIMA DI FMIP\n\n";
+                    //printVector(env, startingVector);
+                    //printVector(env, startingVector,n);
+
 
                     // Print the FMIP model in log file .lp
 /*
@@ -448,6 +483,8 @@ int main(int argc, char **argv)
                     AstatusF = cplexFmip.getStatus(); // For obj status
                     objFval = cplexFmip.getObjValue();
                     cplexFmip.getValues(valsF, varF);
+
+                    //env.out()<<"Var di FMIP: "<<valsF<<"\n\n";
 
                     // Managing of the FMIP status
                     if(AstatusF == IloAlgorithm::Infeasible){ 
@@ -486,11 +523,18 @@ int main(int argc, char **argv)
                     // in x^, is composed only with integer values
                     updateVector(env, setI, startingVector, valsF, n, m); 
 
+                    //std::cout<<"DOPO DI FMIP\n\n";
+                    //printVector(env, startingVector);
+                    //printVector(env, startingVector,n);
+
                     // Call to the restoreBounds function for restore the initial bounds of the variable
                     restoreBounds(varF, setF, startBounds, paramPercentage);
                     
                     // Cleaning of previously saved initial bounds 
                     startBounds.clear(); 
+
+                    // Dealloco le matrici create usando extract()
+                    cplexFmip.end();
                 }
 
                 //----------------------------------------------------------------------------------
@@ -500,8 +544,11 @@ int main(int argc, char **argv)
                 // -------------------------------------------------------------------
 
                 
-                deltaUB = deltaCalculator(deltaUB, startingVector, m);
-                logAndPrint(logFile, "\n\n\n-------DeltaUB POST FMIP-----------: " + std::to_string(deltaUB));
+                deltaCalculator(deltaUB, startingVector, m);
+                std::cout << std::fixed << std::setprecision(10) << "DeltaUB post ricevuta in main: " << deltaUB << std::endl;
+                
+                //deltaUB = objFval;
+                logAndPrint(logFile, "\n\n\n-------DeltaUB POST FMIP-----------: " + std::to_string(deltaUB)+ "\n\n");
                 
                 // Update of the rispective costants DeltaUB in the last costrint of OMIP 
                 rngO[m].setBounds(rngO[m].getLb(), deltaUB); 
@@ -527,9 +574,16 @@ int main(int argc, char **argv)
                 variableFixing(varO, setI, setF, randomVec, startingVector, startBounds, paramPercentage);
 
 
+                IloCplex cplexOmip(env);
+                cplexOmip.setParam(IloCplex::TiLim, 30);
                 // Extraction of the model with C++ API, for the creation of the matrix that
                 // are needet from Cplex
                 cplexOmip.extract(omip);
+
+
+                //std::cout<<"PRIMA DI OMIP\n\n";
+                //printVector(env, startingVector);
+                //printVector(env, startingVector,n);
 
                 // Print the OMIP model in log file .lp
 /*
@@ -586,6 +640,11 @@ int main(int argc, char **argv)
                 // in x^, is composed only with integer values
                 updateVector(env, setI, startingVector, valsO, n, m); 
 
+
+                //std::cout<<"DOPO DI OMIP\n\n";
+                //printVector(env, startingVector);
+                //printVector(env, startingVector,n);
+
                 // Call to the restoreBounds function for restore the initial bounds of the variable
                 restoreBounds(varO, setF, startBounds, paramPercentage);
 
@@ -597,9 +656,9 @@ int main(int argc, char **argv)
 
                 // Print of the value at the before another itercation of the new FMIP
                 logAndPrint(logFile, "\n\n\n----DeltaUB post OMIP (quella controlla per entrare nel if) = " 
-                            + std::to_string(deltaCalculator(deltaUB, startingVector, m)) +"\n\n");
+                            + std::to_string(deltaCalculator(startingVector, m)) +"\n\n");
 
-    
+                cplexOmip.end();
             }
 
             // End of mesuration of the time of computation of the ACS on problem i
@@ -727,6 +786,10 @@ std::vector<IloNumArray> startV1(IloEnv &env, IloNumVarArray &v, IloIntArray &se
         {
             IloInt lb = static_cast<IloInt>(v[i].getLb());
             IloInt ub = static_cast<IloInt>(v[i].getUb());
+            
+            // For limit big scale to the solver that could cause problem in during resolution
+            if(ub > 100000) ub = 100000; // 100000 
+
             IloInt randomNumber = lb + (std::rand() % (ub - lb + 1)); // Generation of a pseudorando value between the bounds of the i variable
             x.add(static_cast<double>(randomNumber)); // Casting to double because x is an array of double (IloNumArray)
             setI.add(i);
@@ -762,6 +825,21 @@ void printVector(IloEnv &env, const std::vector<IloNumArray> &v)
     env.out() << " [ ";
 
     for (int i = 0; i < v.size(); i++)
+    {
+        env.out() << "{ ";
+        for (int j = 0; j < v[i].getSize(); j++)
+        {
+            env.out() << v[i][j] << " ";
+        }
+        env.out() << "}";
+    }
+    env.out() << " ]" << endl;
+}
+void printVector(IloEnv &env, const std::vector<IloNumArray> &v, IloInt n)
+{
+    env.out() << " [ ";
+
+    for (int i = 1; i < v.size(); i++)
     {
         env.out() << "{ ";
         for (int j = 0; j < v[i].getSize(); j++)
@@ -850,6 +928,7 @@ void variableFixing(IloNumVarArray &v, const IloIntArray &setI, IloIntArray &set
         IloInt a = IloRound(sVec[0][rVec[i]]); // IloInt <- IloNum, fixing variable are surely integer
         //IloNum a = sVec[0][rVec[i]]; // IloNum <- IloNum
 
+
         // For strange problem that Cplex can give
         if(a < v[setF[i]].getLb()){
             a = v[setF[i]].getLb();
@@ -887,7 +966,7 @@ void setFGenerator(const IloIntArray &setI, IloIntArray &setF,
 
 /*
     UpdateVector algorithm, is used for update the initial vector , in main called "startingVector",
-    for understand his procedure we have to print. The fact is that is a "game" of indexes so it is
+    for understand his procedure we have to print it. The fact is that it's a "game" of indexes so it's
     difficoult to explain with only words
 */
 void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray> &sVec,
@@ -903,9 +982,9 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
 
         if (setI[j] == i)
         {
-            // env.out() << i << " ";
+             //env.out() << i << " ";
             sVec[0][j] = vals[i];
-            //            env.out() << " x :" << sVec[0][j] << endl;
+            //env.out() << " x :" << sVec[0][j] << endl;
             j++;
         }
         if (j == setI.getSize())
@@ -924,12 +1003,12 @@ void updateVector(IloEnv &env, const IloIntArray &setI, std::vector<IloNumArray>
         if (j < m)
         {
             sVec[1][j] = vals[i];
-        // env.out() << " Delta+ :" << sVec[1][j] << " j :" << j << " i : " << i << endl;
+        //env.out() << " Delta+ :" << sVec[1][j] << " j :" << j << " i : " << i << endl;
         }
         else
         {
             sVec[2][c] = vals[i];
-        // env.out() << " Delta- :" << sVec[2][c] << " c :" << c << " j :" << j << " i : " << i << endl;
+         //env.out() << " Delta- :" << sVec[2][c] << " c :" << c << " j :" << j << " i : " << i << endl;
             c++;
         }
     }
@@ -954,17 +1033,38 @@ void restoreBounds(IloNumVarArray &v, const IloIntArray &setF,
         }
     }
 }
-
 /*
     Function for deltaUB computation
 */
-IloInt deltaCalculator(IloInt delta, const std::vector<IloNumArray> &sVec,const IloInt &m)
+IloNum deltaCalculator(const std::vector<IloNumArray> &sVec, const IloInt &m){
+
+    IloNum delta = 0; // DeltaUB wil be restored for the new computation
+    for (int i = 0; i < m; i++)
+    {
+        // cout << "sVec[1][" << i << "] = " << sVec[1][i] << ", sVec[2][" << i << "] = " << sVec[2][i] << endl;
+        IloNum tmp = sVec[1][i] + sVec[2][i];
+        // cout << "(Delta+ = " << sVec[1][i] << ") + (Delta- = " << sVec[2][i] << ") = " << tmp << " \n";
+        delta = delta + tmp;
+        // cout << "Delta dopo la " << i << " somma: " << delta << endl;
+    }
+
+    return delta;
+}
+/*
+    Function for deltaUB computation (version with modify for reference)
+*/
+IloNum deltaCalculator(IloNum &delta, const std::vector<IloNumArray> &sVec,const IloInt &m)
 {
     delta = 0; // DeltaUB wil be restored for the new computation
     for (int i = 0; i < m; i++)
     {
-        delta += sVec[1][i] + sVec[2][i];
+        //cout << "sVec[1][" << i << "] = " << sVec[1][i] << ", sVec[2][" << i << "] = " << sVec[2][i] << endl;
+        IloNum tmp = sVec[1][i] + sVec[2][i];
+        //cout << "(Delta+ = " << sVec[1][i] << ") + (Delta- = " << sVec[2][i] << ") = " << tmp << " \n";
+        delta = delta + tmp;
+        //cout << "Delta dopo la " << i << " somma: " << delta << endl;
     }
+
     return delta;
 }
 
@@ -1021,6 +1121,9 @@ std::string primalGapCalculator(std::string objVal1, std::string objVal2){
 // ---------------------------- FUNCTION FOR DEBUGGING -------------------------------------------//
 // -----------------------------------------------------------------------------------------------//
 
+/*
+    Function to print variable of the model 
+*/
 void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, const IloObjective &o){
     // Obj
     env.out() <<"Nome: "<<o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl << endl;
@@ -1049,13 +1152,18 @@ void printModel(IloEnv &env, const IloNumVarArray &v, const IloRangeArray &r, co
     env.out() << endl;
 
 }
-
+/*
+    Function to print only function objective of the model
+*/
 void printObj(IloEnv &env, const IloObjective &o)
 {
     env.out() << "Nome: " << o.getName() << " Sense: " << o.getSense() << " Expr: " << o.getExpr() << endl
               << endl;
 }
 
+/*
+    Function to print only variable of the model
+*/
 void printVar(IloEnv &env, const IloNumVarArray &v)
 {
     for (int i = 0; i < v.getSize(); i++)
@@ -1068,25 +1176,28 @@ void printVar(IloEnv &env, const IloNumVarArray &v)
     env.out() << endl;
 }
 
+/*
+    Function to print only costraints of the model
+*/
 void printRng(IloEnv &env, const IloRangeArray &r)
 {
-    // Stampa Range
+    // Scrool every range 
     for (int i = 0; i < r.getSize(); i++)
     {
-        // Estrai l'espressione dal vincolo corrente
+        // Extraction of the expression from the current costraint
         IloExpr expr = r[i].getExpr();
         bool first = true;
 
-        // Itera sui termini nell'espressione
+        // Iteration on terms of the i-range
         for (IloExpr::LinearIterator it = expr.getLinearIterator(); it.ok(); ++it)
         {
-            // Ottieni la variabile corrente
+            // Get current variable
             IloNumVar v = it.getVar();
 
-            // Ottieni il coefficiente della variabile
+            // And get her coefficent 
             double coeff = it.getCoef();
 
-            // Stampa il coefficiente, il nome della variabile e il suo ID
+            // Print the variable with respective id (useful for duplicate variable debugging) 
 
             if (!first)
             {
@@ -1097,7 +1208,7 @@ void printRng(IloEnv &env, const IloRangeArray &r)
             env.out() << coeff << " * " << v.getName() << "(" << v.getId() << ")";
         }
 
-        // Stampa la parte destra del vincolo
+        //  Print the right side of the costraint
         if (r[i].getLb() == r[i].getUb())
         {
             env.out() << " = " << r[i].getLb();
@@ -1118,7 +1229,7 @@ void printRng(IloEnv &env, const IloRangeArray &r)
         env.out() << endl
                   << endl;
 
-        // Rilascia l'espressione per evitare perdite di memoria
+        //  Release of the expression for a correct management of the memory
         expr.end();
     }
 }
