@@ -123,67 +123,7 @@ file_paths = [
     '../out_csv/seed3_p2/8.csv',
     
     '../out_csv/seed3_p3/9.csv',
-
-
- 
-
 ]
-    #'../out_csv/seed1_p1/I20_T30_s1.csv',
-    #'../out_csv/seed2_p1/I20_T30_s2.csv',
-    #'../out_csv/seed3_p1/I20_T30_s3.csv',
-
-    #'../T15_s1.csv',
-    #'../T15_s2.csv',
-    #'../T15_s3.csv',
-
-
-
-    #'../out_csv/seed1_p1/1.csv',
-    #'../2.csv',
-    #'../3.csv',
-    #'../T25_s1.csv',
-    #'../T25_s2.csv',
-    #'../T25_s3.csv',
-    #'../T35_s1.csv',
-    #'../T35_s2.csv',
-    #'../T35_s3.csv',
-    #'../T45_s1.csv',
-    #'../T45_s2.csv',
-    #'../T45_s3.csv',
-    #'../I15_T30_s1.csv',
-    #'../I15_T30_s2.csv',
-    #'../I15_T30_s3.csv'
-
-
-
-#    '../T25_s1.csv',
-#    '../T25_s2.csv',
-#    '../T25_s3.csv',
-#    '../T35_s1.csv',
-#    '../T35_s2.csv',
-#    '../T35_s3.csv',
-#    '../T45_s1.csv',
-#    '../T45_s2.csv',
-#    '../T45_s3.csv'
-#    '../I15_T30_s1.csv',
-#    '../I15_T30_s2.csv',
-#    '../I15_T30_s3.csv'
-
-
-
-
-
-#    '../out_csv/seed1_p1/1.csv',
-#    '../out_csv/seed1_p2/2.csv',
-#    '../out_csv/seed1_p3/3.csv',
-#    '../out_csv/seed2_p1/4.csv',
-#    '../out_csv/seed2_p2/5.csv',
-#    '../out_csv/seed2_p3/6.csv',
-#    '../out_csv/seed3_p1/7.csv',
-#    '../out_csv/seed3_p2/8.csv',
-#    '../out_csv/seed3_p3/9.csv',
-
-#'../T35_s3.csv',
 
 # Iteration of the function for every file
 for i, file_path in enumerate(file_paths, start=1):
