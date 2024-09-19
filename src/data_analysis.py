@@ -84,11 +84,58 @@ def process_file(file_path, fig_num):
 # List of file to execute
 file_paths = [
 
+
     '../out_csv/seed1_p1/1.csv',
+    '../out_csv/seed1_p1/I5_T30_s1.csv',
+    '../out_csv/seed1_p1/I15_T30_s1.csv',
+    '../out_csv/seed1_p1/I20_T30_s1.csv',
+    '../out_csv/seed1_p1/T15_s1.csv',
+    '../out_csv/seed1_p1/T25_s1.csv',
+    '../out_csv/seed1_p1/T35_s1.csv',
+    '../out_csv/seed1_p1/T45_s1.csv',
+
+    '../out_csv/seed1_p2/2.csv',
+    
+    '../out_csv/seed1_p3/3.csv',
+
     '../out_csv/seed2_p1/4.csv',
-    '../out_csv/seed3_p1/7.csv'
+    '../out_csv/seed2_p1/I5_T30_s2.csv',
+    '../out_csv/seed2_p1/I15_T30_s2.csv',
+    '../out_csv/seed2_p1/I20_T30_s2.csv',
+    '../out_csv/seed2_p1/T15_s2.csv',
+    '../out_csv/seed2_p1/T25_s2.csv',
+    '../out_csv/seed2_p1/T35_s2.csv',
+    '../out_csv/seed2_p1/T45_s2.csv',
+
+    '../out_csv/seed2_p2/5.csv',
+    
+    '../out_csv/seed2_p3/6.csv',
+
+    '../out_csv/seed3_p1/7.csv',
+    '../out_csv/seed3_p1/I5_T30_s3.csv',
+    '../out_csv/seed3_p1/I15_T30_s3.csv',
+    '../out_csv/seed3_p1/I20_T30_s3.csv',
+    '../out_csv/seed3_p1/T15_s3.csv',
+    '../out_csv/seed3_p1/T25_s3.csv',
+    '../out_csv/seed3_p1/T35_s3.csv',
+    '../out_csv/seed3_p1/T45_s3.csv',
+
+    '../out_csv/seed3_p2/8.csv',
+    
+    '../out_csv/seed3_p3/9.csv',
+
+
+ 
 
 ]
+    #'../out_csv/seed1_p1/I20_T30_s1.csv',
+    #'../out_csv/seed2_p1/I20_T30_s2.csv',
+    #'../out_csv/seed3_p1/I20_T30_s3.csv',
+
+    #'../T15_s1.csv',
+    #'../T15_s2.csv',
+    #'../T15_s3.csv',
+
 
 
     #'../out_csv/seed1_p1/1.csv',

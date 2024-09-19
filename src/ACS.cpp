@@ -71,7 +71,7 @@ void printVector(IloEnv &env, const std::vector<IloNumArray> &v, IloInt n);
 // Define de T parameter and C parameter, seed and percentage parameter 
 // will be passed from the command line
 constexpr int T_LIM = 30;
-constexpr int C_ITER = 10;
+constexpr int C_ITER = 15;
 
 // Main function
 int main(int argc, char **argv)
