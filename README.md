@@ -34,4 +34,4 @@ For cleaning the directory of log like `/out_csv`, `/out_problem` or `/out_termi
 find out_csv out_problem out_terminal/*/* -type f -delete
 ```
 ***
-In file Test.numbers you can find the general results
+In file Test.numbers you can find the general results.
