@@ -1,7 +1,7 @@
 .vscode/
 .DS_Store
-prova.cpp
-prova
+src/prova.cpp
+src/prova
 acs
 myenv/
 *.o
