@@ -35,3 +35,5 @@ find out_csv out_problem out_terminal/*/* -type f -delete
 ```
 ***
 In file Test.numbers you can find the general results.
+***
+Note that using the cluster of DEI you could find problem with memory limit, so you have to restart te computation. Otherwise is it possible to use the othe cluster in which there are machines more powerfull and wich much more memory space in RAM than this cluster, look at this link https://docs.dei.unipd.it/en/CLUSTER/Overview .
